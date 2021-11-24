@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Typography, Grid } from "@mui/material";
 import SideBar from "../../layout/SideBar";
+import Task from "../dashboard/Task/Task";
 
 const Main = () => {
 	return (
@@ -30,14 +31,8 @@ const Main = () => {
 							project section
 						</Typography>
 					</Grid>
-					<Grid
-						xs={12}
-						sx={{
-							bgcolor: "#80DEEA",
-						}}>
-						<Typography variant='h6' component='div' gutterBottom>
-							Task section
-						</Typography>
+					<Grid xs={12}>
+						<Task></Task>
 					</Grid>
 				</Grid>
 			</Grid>
