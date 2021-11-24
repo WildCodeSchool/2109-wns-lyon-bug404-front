@@ -1,11 +1,18 @@
 import React from "react";
-import logo from "./logo.svg";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
+import LogIn from "./components/screens/auth/login/LogIn";
+import LandingPage from "./components/screens/landingPage/LandingPage";
+import Main from "./components/screens/main/Main";
 
 function App() {
 	return (
 		<div className='App'>
-			<h1>TaskHub</h1>
+			<Routes>
+				<Route path='/' element={<Main />} />
+				<Route path='/landing-page' element={<LandingPage />} />
+				<Route path='/login' element={<LogIn />} />
+			</Routes>
 		</div>
 	);
 }
