@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Grid } from "@mui/material";
+import { Typography, Grid, Button } from "@mui/material";
 
 const SideBar = () => {
 	return (
@@ -14,6 +14,7 @@ const SideBar = () => {
 					}}>
 					SideBar
 				</Typography>
+				<Button variant='contained'>Projects</Button>
 			</Grid>
 		</>
 	);
