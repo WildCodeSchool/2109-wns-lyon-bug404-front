@@ -9,6 +9,7 @@ import {
 	StyledEngineProvider,
 	createTheme,
 } from "@mui/material/styles";
+import Dashboard from "./components/screens/main/Dashboard";
 
 const taskTheme = createTheme({
 	palette: {
@@ -24,15 +25,15 @@ const taskTheme = createTheme({
 		},
 	},
 	typography: {
-		fontFamily: [
-			"Roboto",
-			'"Helvetica Neue"',
-			"Arial",
-			"sans-serif",
-			'"Apple Color Emoji"',
-			'"Segoe UI Emoji"',
-			'"Segoe UI Symbol"',
-		].join(","),
+		fontFamily: "Barlow",
+		fontWeightLight: 200,
+		fontWeightRegular: 400,
+		fontWeightMedium: 600,
+		fontWeightBold: 900,
+		button: {
+			textTransform: "none",
+			borderRadius: "15px",
+		},
 	},
 });
 
@@ -41,8 +42,8 @@ function App() {
 		<StyledEngineProvider injectFirst>
 			<ThemeProvider theme={taskTheme}>
 				<Routes>
-					<Route path='/' element={<Main />} />
-					<Route path='/landing-page' element={<LandingPage />} />
+					<Route path='/dashboard' element={<Dashboard />} />
+					<Route path='/' element={<LandingPage />} />
 					<Route path='/login' element={<LogIn />} />
 				</Routes>
 			</ThemeProvider>

@@ -22,6 +22,7 @@ import Deposits from "./Deposits/Deposits";
 import Orders from "./Orders/Orders";
 import Task from "../dashboard/Task/Task";
 import Icon from "@mui/material/Icon";
+import Project from "../dashboard/Project/Project";
 
 const drawerWidth: number = 240;
 
@@ -167,37 +168,8 @@ function DashboardContent() {
 					<Toolbar />
 					<Container maxWidth='lg'>
 						<Grid container>
-							{/* Chart */}
-
-							{/* <Paper
-									sx={{
-										p: 2,
-										display: "flex",
-										flexDirection: "column",
-										height: 240,
-									}}>
-									<Chart />
-								</Paper> */}
+							<Project />
 							<Task />
-
-							{/* Recent Deposits */}
-							<Grid item xs={12} md={4} lg={3}>
-								{/* <Paper
-									sx={{
-										p: 2,
-										display: "flex",
-										flexDirection: "column",
-										height: 240,
-									}}>
-									<Deposits />
-								</Paper> */}
-							</Grid>
-							{/* Recent Orders */}
-							<Grid item xs={12}>
-								{/* <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-									<Orders />
-								</Paper> */}
-							</Grid>
 						</Grid>
 					</Container>
 				</Box>

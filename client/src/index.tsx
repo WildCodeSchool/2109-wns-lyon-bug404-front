@@ -9,7 +9,8 @@ import Dashboard from "./components/screens/main/Dashboard";
 ReactDOM.render(
 	<React.StrictMode>
 		<BrowserRouter>
-			<Dashboard />
+			{/* <Dashboard /> */}
+			<App />
 		</BrowserRouter>
 	</React.StrictMode>,
 	document.getElementById("root")

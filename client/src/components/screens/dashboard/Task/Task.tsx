@@ -53,7 +53,7 @@ const Task = () => {
 							component='div'
 							gutterBottom
 							sx={{ color: "#FC5B56", paddingTop: ".5rem" }}>
-							Task in progress
+							Recent project
 						</Typography>
 					</Grid>
 					<Grid item xs={7}></Grid>
