@@ -29,6 +29,9 @@ const Header = () => {
 							color: "#0C858B",
 							borderRadius: "10px",
 							width: "6rem",
+							"&:hover": {
+								color: "#fff",
+							},
 						}}>
 						Pricing
 					</Button>
@@ -39,6 +42,9 @@ const Header = () => {
 							color: "#0C858B",
 							borderRadius: "10px",
 							width: "6rem",
+							"&:hover": {
+								color: "#fff",
+							},
 						}}>
 						About us
 					</Button>

@@ -26,7 +26,7 @@ const Project = () => {
 							component='div'
 							gutterBottom
 							sx={{ color: "#FC5B56", paddingTop: ".5rem" }}>
-							Task in progress
+							Recent project
 						</Typography>
 					</Grid>
 					<Grid item xs={7}></Grid>
@@ -39,9 +39,9 @@ const Project = () => {
 								color: "#fff",
 								textTransform: "none",
 								width: "80%",
-								height: "2.5rem",
+								height: "2rem",
 							}}>
-							Add task
+							Add project
 						</Button>
 					</Grid>
 				</Grid>

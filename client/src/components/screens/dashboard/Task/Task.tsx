@@ -66,7 +66,7 @@ const Task = () => {
 								color: "#fff",
 								textTransform: "none",
 								width: "80%",
-								height: "2.5rem",
+								height: "2rem",
 							}}>
 							Add task
 						</Button>
