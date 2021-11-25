@@ -20,23 +20,8 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import Chart from "./Chart/Chart";
 import Deposits from "./Deposits/Deposits";
 import Orders from "./Orders/Orders";
-
-function Copyright(props: any) {
-	return (
-		<Typography
-			variant='body2'
-			color='text.secondary'
-			align='center'
-			{...props}>
-			{"Copyright © "}
-			<Link color='inherit' href='https://mui.com/'>
-				TaskHub
-			</Link>{" "}
-			{new Date().getFullYear()}
-			{"."}
-		</Typography>
-	);
-}
+import Task from "../dashboard/Task/Task";
+import Icon from "@mui/material/Icon";
 
 const drawerWidth: number = 240;
 
@@ -88,7 +73,31 @@ const Drawer = styled(MuiDrawer, {
 	},
 }));
 
-const mdTheme = createTheme();
+const taskTheme = createTheme({
+	palette: {
+		primary: {
+			main: "#129DA4",
+		},
+		secondary: {
+			main: "#FC5B56",
+		},
+		text: {
+			primary: "rgba(0, 0, 0, 0.54)",
+			secondary: "#FC5B56",
+		},
+	},
+	typography: {
+		fontFamily: [
+			"Roboto",
+			'"Helvetica Neue"',
+			"Arial",
+			"sans-serif",
+			'"Apple Color Emoji"',
+			'"Segoe UI Emoji"',
+			'"Segoe UI Symbol"',
+		].join(","),
+	},
+});
 
 function DashboardContent() {
 	const [open, setOpen] = React.useState(true);
@@ -97,17 +106,18 @@ function DashboardContent() {
 	};
 
 	return (
-		<ThemeProvider theme={mdTheme}>
+		<ThemeProvider theme={taskTheme}>
 			<Box sx={{ display: "flex" }}>
 				<CssBaseline />
 				<AppBar position='absolute' open={open}>
 					<Toolbar
 						sx={{
 							pr: "24px", // keep right padding when drawer closed
+							backgroundColor: "#fff",
 						}}>
 						<IconButton
 							edge='start'
-							color='inherit'
+							color='primary'
 							aria-label='open drawer'
 							onClick={toggleDrawer}
 							sx={{
@@ -121,10 +131,10 @@ function DashboardContent() {
 							variant='h6'
 							color='inherit'
 							noWrap
-							sx={{ flexGrow: 1 }}>
-							TaskHub
+							sx={{ flexGrow: 1, color: "black", fontWeight: 700 }}>
+							Home
 						</Typography>
-						<IconButton color='inherit'>
+						<IconButton sx={{ color: "black" }}>
 							<Badge badgeContent={4} color='secondary'>
 								<NotificationsIcon />
 							</Badge>
@@ -138,32 +148,28 @@ function DashboardContent() {
 							alignItems: "center",
 							justifyContent: "flex-end",
 							px: [1],
+							backgroundColor: "#0B1926",
+							height: "100vh",
 						}}>
 						<IconButton onClick={toggleDrawer}>
-							<ChevronLeftIcon />
+							<ChevronLeftIcon sx={{ color: "#fff" }} />
 						</IconButton>
 					</Toolbar>
-					<Divider />
-
-					<Divider />
 				</Drawer>
 				<Box
 					component='main'
 					sx={{
-						backgroundColor: (theme) =>
-							theme.palette.mode === "light"
-								? theme.palette.grey[100]
-								: theme.palette.grey[900],
+						backgroundColor: "#fff",
 						flexGrow: 1,
 						height: "100vh",
 						overflow: "auto",
 					}}>
 					<Toolbar />
-					<Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
-						<Grid container spacing={3}>
+					<Container maxWidth='lg'>
+						<Grid container>
 							{/* Chart */}
-							<Grid item xs={12} md={8} lg={9}>
-								<Paper
+
+							{/* <Paper
 									sx={{
 										p: 2,
 										display: "flex",
@@ -171,11 +177,12 @@ function DashboardContent() {
 										height: 240,
 									}}>
 									<Chart />
-								</Paper>
-							</Grid>
+								</Paper> */}
+							<Task />
+
 							{/* Recent Deposits */}
 							<Grid item xs={12} md={4} lg={3}>
-								<Paper
+								{/* <Paper
 									sx={{
 										p: 2,
 										display: "flex",
@@ -183,16 +190,15 @@ function DashboardContent() {
 										height: 240,
 									}}>
 									<Deposits />
-								</Paper>
+								</Paper> */}
 							</Grid>
 							{/* Recent Orders */}
 							<Grid item xs={12}>
-								<Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+								{/* <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
 									<Orders />
-								</Paper>
+								</Paper> */}
 							</Grid>
 						</Grid>
-						<Copyright sx={{ pt: 4 }} />
 					</Container>
 				</Box>
 			</Box>

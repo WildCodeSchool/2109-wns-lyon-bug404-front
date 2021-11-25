@@ -16,11 +16,11 @@ const taskTheme = createTheme({
 			main: "#129DA4",
 		},
 		secondary: {
-			main: "rgba(0, 0, 0, 0.54)",
+			main: "#FC5B56",
 		},
 		text: {
 			primary: "rgba(0, 0, 0, 0.54)",
-			secondary: "#129DA4",
+			secondary: "#FC5B56",
 		},
 	},
 	typography: {
