@@ -5,7 +5,9 @@ import logo from "../../../assets/logo.png";
 const Header = () => {
 	return (
 		<>
-			<Grid container sx={{ width: "100vw", padding: "1rem" }}>
+			<Grid
+				container
+				sx={{ width: "100vw", padding: "1rem", paddingLeft: "3rem" }}>
 				<Grid item xs={3.5}>
 					<Link href='/'>
 						<Avatar
