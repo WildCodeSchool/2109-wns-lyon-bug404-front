@@ -23,6 +23,7 @@ import Orders from "./Orders/Orders";
 import Task from "../dashboard/Task/Task";
 import Icon from "@mui/material/Icon";
 import Project from "../dashboard/Project/Project";
+import User from "./User";
 
 const drawerWidth: number = 240;
 
@@ -116,30 +117,51 @@ function DashboardContent() {
 							pr: "24px", // keep right padding when drawer closed
 							backgroundColor: "#fff",
 						}}>
-						<IconButton
-							edge='start'
-							color='primary'
-							aria-label='open drawer'
-							onClick={toggleDrawer}
-							sx={{
-								marginRight: "36px",
-								...(open && { display: "none" }),
-							}}>
-							<MenuIcon />
-						</IconButton>
-						<Typography
-							component='h1'
-							variant='h6'
-							color='inherit'
-							noWrap
-							sx={{ flexGrow: 1, color: "black", fontWeight: 700 }}>
-							Home
-						</Typography>
-						<IconButton sx={{ color: "black" }}>
-							<Badge badgeContent={4} color='secondary'>
-								<NotificationsIcon />
-							</Badge>
-						</IconButton>
+						<Grid container direction='row' justifyContent='space-between'>
+							<Grid container item xs={4} direction='row'>
+								<Grid>
+									<IconButton
+										edge='start'
+										color='primary'
+										aria-label='open drawer'
+										onClick={toggleDrawer}
+										sx={{
+											marginRight: "36px",
+											...(open && { display: "none" }),
+										}}>
+										<MenuIcon />
+									</IconButton>
+								</Grid>
+								<Grid>
+									<Typography
+										component='h1'
+										variant='h6'
+										color='inherit'
+										noWrap
+										sx={{ flexGrow: 1, color: "black", fontWeight: 700 }}>
+										Home
+									</Typography>
+								</Grid>
+							</Grid>
+							<Grid
+								container
+								direction='row'
+								justifyContent='flex-end'
+								alignItems='center'
+								item
+								xs={4}>
+								<Grid>
+									<IconButton sx={{ color: "black" }}>
+										<Badge badgeContent={4} color='secondary'>
+											<NotificationsIcon />
+										</Badge>
+									</IconButton>
+								</Grid>
+								<Grid>
+									<User></User>
+								</Grid>
+							</Grid>
+						</Grid>
 					</Toolbar>
 				</AppBar>
 				<Drawer variant='permanent' open={open}>
@@ -167,7 +189,7 @@ function DashboardContent() {
 					}}>
 					<Toolbar />
 					<Container maxWidth='lg'>
-						<Grid container>
+						<Grid container sx={{ marginTop: "1rem" }}>
 							<Project />
 							<Task />
 						</Grid>
