@@ -172,7 +172,7 @@ function DashboardContent() {
 
 							height: "100vh",
 						}}>
-						<Grid container sx={{ marginTop: "1rem" }}>
+						<Grid container>
 							<Project />
 							<Task />
 						</Grid>

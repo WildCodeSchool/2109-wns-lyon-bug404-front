@@ -68,7 +68,7 @@ const Sidebar = ({
 								alignItems='center'
 								sx={{
 									backgroundColor: "white",
-									padding: "1.5rem",
+									padding: "1rem",
 									fontFamily: "Mulish, sans-serif",
 								}}>
 								<Avatar src={logo} />

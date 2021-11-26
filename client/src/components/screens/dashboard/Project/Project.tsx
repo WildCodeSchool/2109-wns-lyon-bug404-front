@@ -6,8 +6,12 @@ import ViewModuleIcon from "@mui/icons-material/ViewModule";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import FolderIcon from "@mui/icons-material/Folder";
+import AddProject from "./AddProject";
 
 const Project = () => {
+	const [open, setOpen] = React.useState(false);
+	const handleOpen = () => setOpen(true);
+	const handleClose = () => setOpen(false);
 	return (
 		<>
 			<Grid container direction='column' sx={{ padding: "1rem" }}>
@@ -40,9 +44,11 @@ const Project = () => {
 								textTransform: "none",
 								width: "80%",
 								height: "2rem",
-							}}>
+							}}
+							onClick={handleOpen}>
 							Add project
 						</Button>
+						<AddProject open={open} handleClose={handleClose} />
 					</Grid>
 				</Grid>
 				{/* second line  */}
