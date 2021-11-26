@@ -12,7 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
-import userImg from "../../../assets/profie-image.png";
+import userImg from "../../../assets/profile-img.png";
 
 const User = () => {
 	const navigate = useNavigate();

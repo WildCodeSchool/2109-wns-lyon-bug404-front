@@ -1,15 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Typography, Grid } from "@mui/material";
-import SideBar from "../../layout/SideBar";
+import Sidebar from "../../layout/Sidebar/Sidebar";
 import Task from "../dashboard/Task/Task";
 
 const Main = () => {
+	const [open, setOpen] = React.useState(true);
+	const toggleDrawer = () => {
+		setOpen(!open);
+	};
 	return (
 		<>
 			<Grid container direction='row'>
 				<Grid xs={3}>
-					<SideBar></SideBar>
+					<Sidebar open={open} toggleDrawer={toggleDrawer} />
 				</Grid>
 				<Grid container xs={9}>
 					{/* right section */}
