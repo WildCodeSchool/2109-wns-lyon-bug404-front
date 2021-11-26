@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import LogIn from "./components/screens/auth/login/LogIn";
 import LandingPage from "./components/screens/landingPage/LandingPage";
-import Main from "./components/screens/main/Dashboard";
+
 import {
 	ThemeProvider,
 	StyledEngineProvider,

@@ -24,8 +24,7 @@ import Task from "../dashboard/Task/Task";
 import Icon from "@mui/material/Icon";
 import Project from "../dashboard/Project/Project";
 import User from "./User";
-import Sidebar from "../../layout/Sidebar/Sidebar"
-
+import Sidebar from "../../layout/Sidebar/Sidebar";
 
 const drawerWidth: number = 240;
 
@@ -111,14 +110,12 @@ function DashboardContent() {
 
 	return (
 		<ThemeProvider theme={taskTheme}>
-			<Box sx={{ display: "flex" }}>
-				<CssBaseline />
-				<AppBar position='absolute' open={open}>
-					<Toolbar
-						sx={{
-							pr: "24px", // keep right padding when drawer closed
-							backgroundColor: "#fff",
-						}}>
+			<Grid container>
+				<Grid item xs={2}>
+					<Sidebar open={open} toggleDrawer={toggleDrawer} />
+				</Grid>
+				<Grid item xs={10} sx={{ padding: "1rem" }}>
+					<Grid item xs={12}>
 						<Grid container direction='row' justifyContent='space-between'>
 							<Grid container item xs={4} direction='row'>
 								<Grid>
@@ -138,9 +135,11 @@ function DashboardContent() {
 									<Typography
 										component='h1'
 										variant='h6'
-										color='inherit'
-										noWrap
-										sx={{ flexGrow: 1, color: "black", fontWeight: 700 }}>
+										sx={{
+											color: "black",
+											fontWeight: 700,
+											paddingLeft: "1rem",
+										}}>
 										Home
 									</Typography>
 								</Grid>
@@ -164,26 +163,22 @@ function DashboardContent() {
 								</Grid>
 							</Grid>
 						</Grid>
-					</Toolbar>
-				</AppBar>
-				<Sidebar open={open} toggleDrawer={toggleDrawer} />
-				<Box
-					component='main'
-					sx={{
-						backgroundColor: "#fff",
-						flexGrow: 1,
-						height: "100vh",
-						overflow: "auto",
-					}}>
-					<Toolbar />
-					<Container maxWidth='lg'>
-						<Grid container sx={{ marginTop: "1rem" }}>
+					</Grid>
+
+					<Grid
+						component='main'
+						sx={{
+							backgroundColor: "#fff",
+
+							height: "100vh",
+						}}>
+						<Grid container>
 							<Project />
 							<Task />
 						</Grid>
-					</Container>
-				</Box>
-			</Box>
+					</Grid>
+				</Grid>
+			</Grid>
 		</ThemeProvider>
 	);
 }

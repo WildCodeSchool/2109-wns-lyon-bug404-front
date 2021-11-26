@@ -6,10 +6,12 @@ import ViewModuleIcon from "@mui/icons-material/ViewModule";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import FolderIcon from "@mui/icons-material/Folder";
+
 import { BsListUl } from 'react-icons/bs'
 import { CgMenuGridR } from 'react-icons/cg'
 import ProjectList from '../../../layout/Projects/ProjectList';
 import '../../../layout/Projects/Projects.css';
+import AddProject from "./AddProject";
 
 const projectData = [
     {name: 'Twitter', chipColor: '#EEEFF8', chipFont: '#5B6094', content: 'These project will need a new brand identity where they get recognized', avatar: ['jcvd.jpg'], categories: ['branding']},
@@ -18,7 +20,10 @@ const projectData = [
 ]
 
 const Project = () => {
-
+	const [open, setOpen] = React.useState(false);
+	const handleOpen = () => setOpen(true);
+	const handleClose = () => setOpen(false);
+  
 	return (
 		<>
 			<Grid container direction='column' sx={{ padding: "1rem" }}>
@@ -51,9 +56,11 @@ const Project = () => {
 								textTransform: "none",
 								width: "80%",
 								height: "2rem",
-							}}>
+							}}
+							onClick={handleOpen}>
 							Add project
 						</Button>
+						<AddProject open={open} handleClose={handleClose} />
 					</Grid>
 				</Grid>
 				{/* second line  */}

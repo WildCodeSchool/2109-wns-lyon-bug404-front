@@ -12,6 +12,7 @@ import user2 from "../../../../assets/user2.png";
 import user3 from "../../../../assets/user3.png";
 import Progress from "../../../layout/Progress";
 import { format } from "date-fns";
+import AddTask from "./AddTask";
 
 const tasks = [
 	{
@@ -35,6 +36,9 @@ const tasks = [
 ];
 
 const Task = () => {
+	const [open, setOpen] = React.useState(false);
+	const handleOpen = () => setOpen(true);
+	const handleClose = () => setOpen(false);
 	return (
 		<>
 			<Grid container direction='column' sx={{ padding: "1rem" }}>
@@ -55,6 +59,7 @@ const Task = () => {
 							sx={{ color: "#FC5B56", paddingTop: ".5rem" }}>
 							Recent project
 						</Typography>
+						<AddTask open={open} handleClose={handleClose} />
 					</Grid>
 					<Grid item xs={7}></Grid>
 					<Grid item xs={2} container>
@@ -67,7 +72,8 @@ const Task = () => {
 								textTransform: "none",
 								width: "80%",
 								height: "2rem",
-							}}>
+							}}
+							onClick={handleOpen}>
 							Add task
 						</Button>
 					</Grid>
