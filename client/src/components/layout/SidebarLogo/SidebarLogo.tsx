@@ -1,4 +1,4 @@
-import { Avatar, Box } from "@mui/material";
+import { Box } from "@mui/material";
 import logo from '../../../assets/logo-sidebar-taskhub.png'
 
 const SidebarLogo = () => {
@@ -10,7 +10,7 @@ const SidebarLogo = () => {
             marginBottom: '1.5rem'
         }}
     >
-        <Avatar src={logo} sx={{ width: '200px', height: '60px', justifyContent: 'center' }} variant='square' />
+        <img src={logo} style={{ height: '60px', justifyContent: 'center' }}/>
     </Box>)
 }
 
