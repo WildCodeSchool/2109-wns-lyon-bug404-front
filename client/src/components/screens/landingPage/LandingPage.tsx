@@ -16,6 +16,8 @@ const LandingPage = () => {
 					height: "100vh",
 					backgroundSize: "100%",
 					backgroundPosition: "center",
+					padding: "0",
+					margin: "0",
 				}}>
 				<Header></Header>
 				<Grid container>
@@ -26,7 +28,7 @@ const LandingPage = () => {
 						sx={{
 							paddingLeft: "4rem",
 							marginTop: "5rem",
-							height: "80%",
+							height: "70%",
 						}}>
 						<Grid item xs={9}>
 							<Typography
