@@ -17,7 +17,7 @@ const Progress = ({ color, progress }: { color: string; progress: number }) => {
 			backgroundColor: theme.palette.mode === "light" ? `${color}` : "#308fe8",
 		},
 	}));
-	console.log(color);
+
 	return (
 		<>
 			<BorderLinearProgress variant='determinate' value={progress} />

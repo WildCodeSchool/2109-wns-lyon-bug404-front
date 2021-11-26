@@ -10,6 +10,7 @@ import {
 	createTheme,
 } from "@mui/material/styles";
 import Dashboard from "./components/screens/main/Dashboard";
+import ProjectDetails from "./components/screens/dashboard/Project/ProjectDetails";
 
 const taskTheme = createTheme({
 	palette: {
@@ -45,6 +46,7 @@ function App() {
 					<Route path='/dashboard' element={<Dashboard />} />
 					<Route path='/' element={<LandingPage />} />
 					<Route path='/login' element={<LogIn />} />
+					<Route path='/dashboard/:id' element={<ProjectDetails />} />
 				</Routes>
 			</ThemeProvider>
 		</StyledEngineProvider>

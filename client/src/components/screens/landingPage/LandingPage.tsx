@@ -20,15 +20,16 @@ const LandingPage = () => {
 					margin: "0",
 				}}>
 				<Header></Header>
-				<Grid container>
+				<Grid container sx={{ height: "70vh" }}>
 					<Grid
 						item
 						xs={7}
 						container
+						alignItems='center'
 						sx={{
 							paddingLeft: "4rem",
 							marginTop: "5rem",
-							height: "70%",
+							height: "50%",
 						}}>
 						<Grid item xs={9}>
 							<Typography
@@ -60,6 +61,7 @@ const LandingPage = () => {
 							justifyContent='space-between'
 							alignItems='center'>
 							<Button
+								id='get-started'
 								variant='contained'
 								sx={{
 									backgroundColor: "#E0F2F1",
@@ -96,7 +98,7 @@ const LandingPage = () => {
 						<Avatar
 							variant='square'
 							src={landingImg}
-							sx={{ height: "500px", width: "100%" }}></Avatar>
+							sx={{ height: "100%", width: "100%" }}></Avatar>
 					</Grid>
 				</Grid>
 			</Grid>

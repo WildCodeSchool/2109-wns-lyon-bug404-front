@@ -28,7 +28,11 @@ const User = () => {
 		<>
 			<Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
 				<Tooltip title='Account settings'>
-					<IconButton onClick={handleClick} size='small' sx={{ ml: 2 }}>
+					<IconButton
+						id='user-btn'
+						onClick={handleClick}
+						size='small'
+						sx={{ ml: 2 }}>
 						<Avatar sx={{ width: 40, height: 40 }} src={userImg} />
 					</IconButton>
 				</Tooltip>
@@ -77,6 +81,7 @@ const User = () => {
 					Settings
 				</MenuItem>
 				<MenuItem
+					id='logout'
 					onClick={() => {
 						navigate("/");
 					}}>
