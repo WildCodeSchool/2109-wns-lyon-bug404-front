@@ -26,6 +26,7 @@ import Project from "../dashboard/Project/Project";
 import User from "./User";
 import Sidebar from "../../layout/Sidebar/Sidebar"
 
+
 const drawerWidth: number = 240;
 
 interface AppBarProps extends MuiAppBarProps {
@@ -165,21 +166,6 @@ function DashboardContent() {
 						</Grid>
 					</Toolbar>
 				</AppBar>
-				{/* <Drawer variant='permanent' open={open}>
-					<Toolbar
-						sx={{
-							display: "flex",
-							alignItems: "center",
-							justifyContent: "flex-end",
-							px: [1],
-							backgroundColor: "#0B1926",
-							height: "100vh",
-						}}>
-						<IconButton onClick={toggleDrawer}>
-							<ChevronLeftIcon sx={{ color: "#fff" }} />
-						</IconButton>
-					</Toolbar>
-				</Drawer> */}
 				<Sidebar open={open} toggleDrawer={toggleDrawer} />
 				<Box
 					component='main'
