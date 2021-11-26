@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { Typography, Grid, Button, Paper, Avatar } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import ViewListIcon from "@mui/icons-material/ViewList";
@@ -6,8 +6,19 @@ import ViewModuleIcon from "@mui/icons-material/ViewModule";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import FolderIcon from "@mui/icons-material/Folder";
+import { BsListUl } from 'react-icons/bs'
+import { CgMenuGridR } from 'react-icons/cg'
+import ProjectList from '../../../layout/Projects/ProjectList';
+import '../../../layout/Projects/Projects.css';
+
+const projectData = [
+    {name: 'Twitter', chipColor: '#EEEFF8', chipFont: '#5B6094', content: 'These project will need a new brand identity where they get recognized', avatar: ['jcvd.jpg'], categories: ['branding']},
+    {name: 'Wild school', chipColor: '#EDF7F3', chipFont: '#60C199', content: 'The school needs a new plateform for their remote classes', avatar: ['queen.jpeg'], categories: ['design', 'code']},
+    {name: 'Tesla', chipColor: '#E5F7FA', chipFont: '#28A7C7', content: 'The clients wants a news markup for their website', avatar: ['rambo.jpeg'], categories: ['accounting']},
+]
 
 const Project = () => {
+
 	return (
 		<>
 			<Grid container direction='column' sx={{ padding: "1rem" }}>
@@ -55,6 +66,11 @@ const Project = () => {
 							<ViewModuleIcon />
 						</ToggleButton>
 					</ToggleButtonGroup>
+				</Grid>
+				<Grid container direction='row'>
+					<div className="projects">
+						{ projectData.map(data => <ProjectList data={data} /> )}
+					</div>
 				</Grid>
 			</Grid>
 		</>

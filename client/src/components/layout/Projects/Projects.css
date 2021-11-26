@@ -1,0 +1,33 @@
+p {
+    margin: 0
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.title {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-left: 5rem;
+    margin-bottom: 0.875rem;
+}
+
+.title p {
+    font-size: 1.75rem;
+    color: #F65B56;
+}
+
+.display {
+    margin-left: 5rem;
+}
+
+.projects {
+    display: flex;
+    justify-content: space-around;
+}
