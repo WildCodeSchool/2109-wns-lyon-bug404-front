@@ -1,0 +1,28 @@
+version: '3'
+services:
+  server:
+    build: ./server
+    container_name: 404bugs_server
+    ports:
+      - 4000:4000
+    networks:
+      - 404bugs_net
+  client:
+    build: ./client
+    container_name: 404bugs_client
+    ports:
+      - 3000:3000
+  db:
+    image: mariadb
+    container_name: 404bugs_db
+    volumes: ['./:/var/lib/mysql']
+    ports:
+      - 3307:3307
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: db
+    networks:
+      - 404bugs_net
+networks:
+  404bugs_net:
