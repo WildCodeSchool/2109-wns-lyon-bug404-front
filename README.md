@@ -1,1 +1,6 @@
-hello from my branhc
+## Taskhub
+
+Pour démarrer les containeurs:
+```
+docker-compose up -d
+```
