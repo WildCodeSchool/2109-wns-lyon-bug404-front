@@ -1,28 +1,35 @@
-version: '3'
+version: "3"
 services:
   server:
-    build: ./server
+    build:
+      context: ./server
+      dockerfile: dev.dockerfile
     container_name: 404bugs_server
     ports:
       - 4000:4000
     networks:
       - 404bugs_net
     environment:
-    - SERVER=mysql
-    - DB_HOST=404bugs_db
-    - DB=db
-    - DB_USER=root
-    - DB_PASSWORD=password
-    - PORT=4000
+      - SERVER=mysql
+      - DB_HOST=404bugs_db
+      - DB=db
+      - DB_USER=root
+      - DB_PASSWORD=password
+      - PORT=4000
   client:
-    build: ./client
+    build:
+      context: ./client
+      dockerfile: dev.dockerfile
     container_name: 404bugs_client
     ports:
       - 3000:3000
+    volumes:
+      - ./client/src:/app/src
+      - ./client/public:/app/public
   db:
     image: mariadb
     container_name: 404bugs_db
-    volumes: ['./db:/var/lib/mysql']
+    volumes: ["./db:/var/lib/mysql"]
     ports:
       - 3307:3307
     restart: always

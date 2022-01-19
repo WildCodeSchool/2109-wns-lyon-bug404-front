@@ -3,7 +3,12 @@ FROM node:lts-alpine
 WORKDIR /app
 COPY package.json package.json
 RUN npm i
+COPY public public
 COPY src src
 COPY tsconfig.json tsconfig.json
 
-CMD ["npm", "run","start"]
+ENV WDS_SOCKET_PORT 0
+EXPOSE 3000
+
+RUN npm run build
+CMD npx serve ./build
