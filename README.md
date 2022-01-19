@@ -1,6 +1,13 @@
 ## Taskhub
 
-Pour démarrer les containeurs:
+Pour démarrer les containeurs en developpement:
+
 ```
-docker-compose up -d
+npm run docker:dev
+```
+
+Pour démarrer les containeurs en production:
+
+```
+npm run docker:prod
 ```
