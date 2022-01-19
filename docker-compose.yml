@@ -7,6 +7,13 @@ services:
       - 4000:4000
     networks:
       - 404bugs_net
+    environment:
+    - SERVER=mysql
+    - DB_HOST=404bugs_db
+    - DB=db
+    - DB_USER=root
+    - DB_PASSWORD=password
+    - PORT=4000
   client:
     build: ./client
     container_name: 404bugs_client
@@ -15,7 +22,7 @@ services:
   db:
     image: mariadb
     container_name: 404bugs_db
-    volumes: ['./:/var/lib/mysql']
+    volumes: ['./db:/var/lib/mysql']
     ports:
       - 3307:3307
     restart: always
