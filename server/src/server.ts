@@ -6,9 +6,10 @@ import { buildSchema } from "type-graphql";
 import { config } from "./config/config";
 import { TaskResolver } from "./resolvers/TaskResolver";
 import { ProjectResolver } from "./resolvers/ProjectResolver";
+import { UsersResolver } from "./resolvers/UserResolver";
+import { customAuthChecker } from "./auth/auth";
 
 export async function bootstrap() {
-  console.log(config);
   await createConnection({
     type: config.server as "mariadb",
     url: `${config.server}://${config.db_uname}:${config.db_password}@${config.host}/${config.db}`,
@@ -17,11 +18,18 @@ export async function bootstrap() {
   });
 
   const schema = await buildSchema({
-    resolvers: [TaskResolver, ProjectResolver],
+    resolvers: [TaskResolver, ProjectResolver, UsersResolver],
+    authChecker: customAuthChecker,
   });
 
   const server = new ApolloServer({
     schema,
+    context: ({ req }) => {
+      return {
+        token: req.headers.authorization,
+        user: null,
+      };
+    },
   });
 
   const { url } = await server.listen(config.port);
