@@ -23,9 +23,9 @@ export class User extends BaseEntity {
   @Column()
   password!: string;
 
-  //   @Field(() => [Project])
-  //   @OneToMany(() => Project, (project) => project.createBy)
-  //   projects: Project[];
+  @Field(() => [Project], { nullable: true })
+  @OneToMany(() => Project, (project) => project.created_by)
+  projects?: Project[];
 }
 
 @InputType()
