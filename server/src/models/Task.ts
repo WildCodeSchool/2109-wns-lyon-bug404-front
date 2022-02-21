@@ -1,97 +1,95 @@
 import { userInfo } from "os";
 import { Field, ID, InputType, ObjectType } from "type-graphql";
 import {
-	BaseEntity,
-	Column,
-	Entity,
-	PrimaryGeneratedColumn,
-	ManyToOne,
-	OneToMany,
+  BaseEntity,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  OneToMany,
 } from "typeorm";
 import { Project } from "./Project";
+import { User } from "./User";
 
 @ObjectType()
 @Entity()
 export class Task extends BaseEntity {
-	@Field(() => ID)
-	@PrimaryGeneratedColumn()
-	id!: number;
+  @Field(() => ID)
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-	@Field()
-	@Column()
-	title!: string;
+  @Field()
+  @Column()
+  title!: string;
 
-	@Field()
-	@Column()
-	description!: string;
+  @Field()
+  @Column()
+  description!: string;
 
-	@Field()
-	@Column()
-	estimated_time!: string;
+  @Field()
+  @Column()
+  estimated_time!: string;
 
-	@Field()
-	@Column()
-	created_at!: string;
+  @Field()
+  @Column()
+  created_at!: string;
 
-	@Field()
-	@Column()
-	spent_time!: string;
+  @Field()
+  @Column()
+  spent_time!: string;
 
-	@Field()
-	@Column()
-	status!: string;
+  @Field()
+  @Column()
+  status!: string;
 
-	@Field()
-	@Column()
-	category!: string;
+  @Field()
+  @Column()
+  category!: string;
 
-	// @Field()
-	// @ManyToOne(() => Project, (project) => project.id)
-	// projectId: number;
+  @Field()
+  @ManyToOne(() => Project, (project) => project.tasks, { lazy: true })
+  project: Project;
+
+  @Field({ nullable: true })
+  @ManyToOne(() => User, (user) => user.id, { lazy: true })
+  assigned_to?: User;
 }
 
 @InputType()
 export class TaskInput extends BaseEntity {
-	@Field()
-	title!: string;
+  @Field()
+  title!: string;
 
-	@Field()
-	description!: string;
+  @Field()
+  description!: string;
 
-	@Field()
-	estimated_time!: string;
+  @Field()
+  estimated_time!: string;
 
-	@Field()
-	created_at!: string;
+  @Field()
+  created_at!: string;
 
-	@Field()
-	spent_time!: string;
+  @Field()
+  spent_time!: string;
 
-	@Field()
-	status!: string;
+  @Field()
+  status!: string;
 
-	@Field()
-	category!: string;
-
-	// @Field()
-	// @ManyToOne(() => Project, (project) => project.id)
-	// projectId: number;
+  @Field()
+  category!: string;
 }
 
 @InputType()
 export class TaskUpdateInput extends BaseEntity {
-	@Field({ nullable: true })
-	title!: string;
+  @Field({ nullable: true })
+  title!: string;
 
-	@Field({ nullable: true })
-	description!: string;
+  @Field({ nullable: true })
+  description!: string;
 
-	@Field({ nullable: true })
-	status!: string;
+  @Field({ nullable: true })
+  status!: string;
 
-	@Field({ nullable: true })
-	spent_time!: string;
-
-	// @Field({ nullable: true })
-	// projectId: number;
+  @Field({ nullable: true })
+  spent_time!: string;
 }

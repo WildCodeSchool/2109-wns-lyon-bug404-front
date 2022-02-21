@@ -5,6 +5,9 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   OneToMany,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
 } from "typeorm";
 import { Task } from "./Task";
 import { User } from "./User";
@@ -41,12 +44,16 @@ export class Project extends BaseEntity {
   status!: boolean;
 
   @Field()
-  @OneToMany(() => User, (user) => user.id)
-  created_by!: User;
+  @ManyToOne(() => User, (user) => user.id)
+  created_by: User;
 
-  // @Field()
-  // @OneToMany(() => Task, (task) => task)
-  // tasks: Task[];
+  @Field(() => [User], { nullable: true })
+  @ManyToMany(() => User, (user) => user.assigned_projects)
+  assigned_users?: User[];
+
+  @Field(() => [Task], { nullable: true })
+  @OneToMany(() => Task, (task) => task.project, { lazy: true })
+  tasks?: Task[];
 }
 
 @InputType()
