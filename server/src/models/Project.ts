@@ -8,8 +8,10 @@ import {
   ManyToOne,
   ManyToMany,
 } from "typeorm";
+import { ProjectStates } from "../enums/ProjectStates";
 import { Task } from "./Task";
 import { User } from "./User";
+import { Status } from "./Status";
 
 @ObjectType()
 @Entity()
@@ -39,8 +41,12 @@ export class Project extends BaseEntity {
   end_date!: string;
 
   @Field()
-  @Column({ default: false })
-  status!: boolean;
+  @Column({
+    type: "enum",
+    enum: ProjectStates,
+    default: ProjectStates.ON_TRACK,
+  })
+  state!: ProjectStates;
 
   @Field()
   @ManyToOne(() => User, (user) => user.id)
@@ -53,6 +59,10 @@ export class Project extends BaseEntity {
   @Field(() => [Task], { nullable: true })
   @OneToMany(() => Task, (task) => task.project, { lazy: true })
   tasks?: Task[];
+
+  @Field(() => [Status])
+  @OneToMany(() => Status, (status) => status.project)
+  taskStatus!: Status[];
 }
 
 @InputType()
@@ -71,9 +81,6 @@ export class ProjectInput extends BaseEntity {
 
   @Field()
   end_date!: string;
-
-  @Field()
-  status: boolean;
 }
 
 @InputType()
@@ -92,7 +99,4 @@ export class ProjectUpdateInput extends BaseEntity {
 
   @Field({ nullable: true })
   end_date!: string;
-
-  @Field({ nullable: true })
-  status: boolean;
 }

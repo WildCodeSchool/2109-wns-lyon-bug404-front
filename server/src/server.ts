@@ -8,22 +8,30 @@ import { TaskResolver } from "./resolvers/TaskResolver";
 import { ProjectResolver } from "./resolvers/ProjectResolver";
 import { UsersResolver } from "./resolvers/UserResolver";
 import { customAuthChecker } from "./auth/auth";
+import { CategoryResolver } from "./resolvers/CategoryResolver";
+import { StatusResolver } from "./resolvers/StatusResolver";
 
 export async function bootstrap() {
   await createConnection({
     type: config.server as "mysql",
     url: `${config.server}://${config.db_uname}:${config.db_password}@${config.host}/${config.db}`,
-    // url: "postgres://ogsvcsekjzjcnd:d46a14d3797737d18fa6fe067666c523e134b91f3ed003cc0fdbd24a6dd3fee9@ec2-34-253-29-48.eu-west-1.compute.amazonaws.com:5432/dar498qkdfi05s",
     entities: [path.resolve(__dirname, "./models/*.{ts,js}")],
     synchronize: true,
     ssl: {
       rejectUnauthorized: false,
     },
+
     // logging: ["query", "error"],
   });
 
   const schema = await buildSchema({
-    resolvers: [TaskResolver, ProjectResolver, UsersResolver],
+    resolvers: [
+      TaskResolver,
+      ProjectResolver,
+      UsersResolver,
+      CategoryResolver,
+      StatusResolver,
+    ],
     authChecker: customAuthChecker,
   });
 

@@ -30,7 +30,9 @@ export class TaskResolver {
   ): Promise<Task> {
     const project = await this.projectRepository.findOne(projectID);
     let finalTask = { ...newTaskData, project: project };
+
     const task = this.taskRepository.create(finalTask);
+    task.categories = [];
     return await task.save();
   }
 
@@ -72,6 +74,19 @@ export class TaskResolver {
 
     if (task) {
       task.assigned_to = user;
+      return await task.save();
+    }
+    return null;
+  }
+
+  // unassign memeber from project
+  @Mutation(() => Task!) async unassignUserFromTask(
+    @Arg("taskID") taskID: number,
+    @Arg("userID") userID: number
+  ): Promise<Task | null> {
+    let task = await this.taskRepository.findOne(taskID);
+    if (task.assigned_to) {
+      task.assigned_to = null;
       return await task.save();
     }
     return null;

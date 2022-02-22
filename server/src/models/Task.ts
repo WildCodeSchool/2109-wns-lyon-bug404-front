@@ -5,9 +5,13 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   ManyToOne,
+  OneToMany,
+  ManyToMany,
 } from "typeorm";
 import { Project } from "./Project";
+import { Status } from "./Status";
 import { User } from "./User";
+import { Category } from "./Category";
 
 @ObjectType()
 @Entity()
@@ -37,12 +41,12 @@ export class Task extends BaseEntity {
   spent_time!: string;
 
   @Field()
-  @Column()
-  status!: string;
+  @ManyToOne(() => Status, (status) => status.tasks)
+  status?: Status;
 
-  @Field()
-  @Column()
-  category!: string;
+  @Field(() => [Category], { nullable: true })
+  @ManyToMany(() => Category, (category) => category.tasks)
+  categories?: Category[];
 
   @Field()
   @ManyToOne(() => Project, (project) => project.tasks, { lazy: true })
@@ -69,12 +73,6 @@ export class TaskInput extends BaseEntity {
 
   @Field()
   spent_time!: string;
-
-  @Field()
-  status!: string;
-
-  @Field()
-  category!: string;
 }
 
 @InputType()
@@ -84,9 +82,6 @@ export class TaskUpdateInput extends BaseEntity {
 
   @Field({ nullable: true })
   description!: string;
-
-  @Field({ nullable: true })
-  status!: string;
 
   @Field({ nullable: true })
   spent_time!: string;

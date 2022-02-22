@@ -1,27 +1,38 @@
 import { Resolver, Query, Mutation, Arg, ID } from "type-graphql";
 import { Project, ProjectInput, ProjectUpdateInput } from "../models/Project";
-import { getRepository } from "typeorm";
+import { getRepository, Repository } from "typeorm";
 import { User } from "../models/User";
+import { ProjectStates } from "../enums/ProjectStates";
+import { Status, StatusInput } from "../models/Status";
+
+const statusArray = [
+  { name: "To do" },
+  { name: "In progress" },
+  { name: "Done" },
+];
 
 @Resolver()
 export class ProjectResolver {
   private projectRepository = getRepository(Project);
   private userRepository = getRepository(User);
+  private statusRepository = getRepository(Status);
 
   // get all projects
   @Query(() => [Project])
   async getProjects(): Promise<Project[]> {
-    const projects = await this.projectRepository.find();
-    console.log(projects);
-    return projects;
+    return await this.projectRepository.find({
+      relations: ["assigned_users"],
+    });
   }
 
   //  Find one product
   @Query(() => Project!, { nullable: true })
   async getProject(
-    @Arg("projectID") projectID: string
+    @Arg("projectID") projectID: number
   ): Promise<Project | undefined | null> {
-    return await this.projectRepository.findOne(projectID);
+    return await this.projectRepository.findOne(projectID, {
+      relations: ["assigned_users"],
+    });
   }
 
   // add one project
@@ -32,8 +43,11 @@ export class ProjectResolver {
   ): Promise<Project> {
     const project = this.projectRepository.create(newProjectData);
     const user = await this.userRepository.findOne(id);
+
     project.assigned_users = [];
+    project.taskStatus = [];
     project.created_by = user;
+
     return await project.save();
   }
 
@@ -77,6 +91,73 @@ export class ProjectResolver {
     });
 
     project.assigned_users.push(user);
+
+    if (project) {
+      await project.save();
+      return project;
+    }
+    return null;
+  }
+
+  // unassign memeber from project
+  @Mutation(() => Project!) async unassignUserFromProject(
+    @Arg("projectID") projectID: number,
+    @Arg("userID") userID: number
+  ): Promise<Project | null> {
+    let project = await this.projectRepository.findOne(projectID, {
+      relations: ["assigned_users"],
+    });
+
+    if (project) {
+      project.assigned_users = project.assigned_users.filter(
+        (user) => user.id !== userID
+      );
+      await project.save();
+      return project;
+    }
+    return null;
+  }
+
+  // update project status
+  @Mutation(() => Project)
+  async changeProjectStates(
+    @Arg("projectID") id: number,
+    @Arg("state") state: ProjectStates
+  ): Promise<Project | Error> {
+    const project = await this.projectRepository.findOne(id);
+    if (ProjectStates[state]) {
+      project.state = ProjectStates[state];
+      await project.save();
+      return project;
+    }
+    return new Error("Status doesn't exist");
+  }
+
+  // initiate status to a new project
+  @Mutation(() => Project!) async initiateProjectStatus(
+    @Arg("projectID") projectID: number
+  ): Promise<Project | null> {
+    const project = await this.projectRepository.findOne(projectID, {
+      relations: ["taskStatus"],
+    });
+    //  const status = this.statusRepository.create({ name: "hi" });
+
+    // async function createStatus(item, statusRepo: Repository<Status>) {
+    //   const status = statusRepo.create(item);
+    //   // status.name = item.name;
+    //   status.project = project;
+    //   project.taskStatus.push(status);
+    //   await status.save();
+    // }
+
+    for (const item of statusArray) {
+      // await createStatus(item, this.statusRepository);
+      const status = this.statusRepository.create(item);
+      // status.name = item.name;
+      status.project = project;
+      project.taskStatus.push(status);
+      await status.save();
+    }
 
     if (project) {
       await project.save();
