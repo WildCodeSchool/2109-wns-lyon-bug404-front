@@ -7,7 +7,6 @@ import {
   OneToMany,
   ManyToOne,
   ManyToMany,
-  JoinTable,
 } from "typeorm";
 import { Task } from "./Task";
 import { User } from "./User";
@@ -75,9 +74,6 @@ export class ProjectInput extends BaseEntity {
 
   @Field()
   status: boolean;
-
-  // @Field()
-  // tasks: Task[];
 }
 
 @InputType()
@@ -99,7 +95,4 @@ export class ProjectUpdateInput extends BaseEntity {
 
   @Field({ nullable: true })
   status: boolean;
-
-  // @Field()
-  // tasks: Task[];
 }

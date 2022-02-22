@@ -7,7 +7,6 @@ import {
   PrimaryGeneratedColumn,
   ManyToMany,
   JoinTable,
-  JoinColumn,
 } from "typeorm";
 import { Project } from "./Project";
 import { Task } from "./Task";

@@ -1,4 +1,3 @@
-import { userInfo } from "os";
 import { Field, ID, InputType, ObjectType } from "type-graphql";
 import {
   BaseEntity,
@@ -6,7 +5,6 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   ManyToOne,
-  OneToMany,
 } from "typeorm";
 import { Project } from "./Project";
 import { User } from "./User";
