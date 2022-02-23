@@ -2,18 +2,13 @@ import { gql, useMutation } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { SIGNIN } from "../../api/mutations/User";
 //components
 import Header from "../../components/Header";
 //styles and assets
 import "./Login.css";
 const loginIllustration = require("../../assets/loginIllustration.png");
 const loingLogo = require("../../assets/loginLogo.png");
-
-const SIGNIN = gql`
-  mutation signin($email: String!, $password: String!) {
-    signin(email: $email, password: $password)
-  }
-`;
 
 export default function Login(): JSX.Element {
   const navigate = useNavigate();
