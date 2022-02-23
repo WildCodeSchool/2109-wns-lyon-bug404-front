@@ -27,16 +27,6 @@ export const Redirect = () => {
           </h3>
         </div>
       </div>
-      {/* <div className="flex justify-center h-1/2 flex-col bg-green-200">
-        <div className=" h-1/2 ">
-          <img className="cover" src={redirectImage} alt="" />
-        </div>
-
-        <div className="text">
-          A confirmation mail has been sent to you, please confirm your email
-          address
-        </div>
-      </div> */}
     </div>
   );
 };

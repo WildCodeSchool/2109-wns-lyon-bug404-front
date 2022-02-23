@@ -60,9 +60,9 @@ export default function Signup(): JSX.Element {
           />
         </div>
         <div className="basis-1/2">
-          <div className="h-44">
+          <div className="h-32 mb-2">
             <img
-              className="mx-auto  w-auto"
+              className="mx-auto  w-auto h-40 "
               src={loingLogo}
               alt="logo taskhub"
             />

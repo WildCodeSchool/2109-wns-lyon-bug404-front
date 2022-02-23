@@ -53,7 +53,7 @@ export default function Login(): JSX.Element {
         <div className="basis-1/2">
           <div className="h-44">
             <img
-              className="mx-auto  w-auto"
+              className="mx-auto  w-auto h-44"
               src={loingLogo}
               alt="logo taskhub"
             />
