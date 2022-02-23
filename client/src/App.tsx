@@ -6,6 +6,7 @@ import "./App.css";
 import Dashboard from "./pages/dashboard/Dashboard";
 import LandingPage from "./pages/landingpage/LandingPage";
 import Login from "./pages/login/Login";
+import { Redirect } from "./pages/signup/Redirect";
 import Signup from "./pages/signup/Signup";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/redirect" element={<Redirect />} />
           </Routes>
         </div>
       </BrowserRouter>

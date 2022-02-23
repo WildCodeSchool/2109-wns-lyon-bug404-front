@@ -38,16 +38,20 @@ export class UsersResolver {
     @Arg("familyName") familyName: string,
     @Arg("email") email: string,
     @Arg("password") password: string
-  ): Promise<User> {
-    const newUser = this.userRepo.create({
-      firstName,
-      familyName,
-      email,
-      password: await argon2.hash(password),
-    });
-    newUser.assigned_tasks = [];
-    await newUser.save();
-    return newUser;
+  ): Promise<User | Error> {
+    try {
+      const newUser = this.userRepo.create({
+        firstName,
+        familyName,
+        email,
+        password: await argon2.hash(password),
+      });
+      newUser.assigned_tasks = [];
+      await newUser.save();
+      return newUser;
+    } catch (e) {
+      return new Error("User already exists");
+    }
   }
 
   // login
