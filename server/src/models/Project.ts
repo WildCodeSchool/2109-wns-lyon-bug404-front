@@ -33,12 +33,16 @@ export class Project extends BaseEntity {
   image_url!: string;
 
   @Field()
-  @Column()
-  start_date!: string;
+  @Column({
+    type: "datetime",
+  })
+  start_date!: Date;
 
   @Field()
-  @Column()
-  end_date!: string;
+  @Column({
+    type: "datetime",
+  })
+  end_date?: Date;
 
   @Field()
   @Column({
@@ -77,10 +81,7 @@ export class ProjectInput extends BaseEntity {
   image_url!: string;
 
   @Field()
-  start_date!: string;
-
-  @Field()
-  end_date!: string;
+  start_date!: Date;
 }
 
 @InputType()
@@ -95,8 +96,8 @@ export class ProjectUpdateInput extends BaseEntity {
   image_url!: string;
 
   @Field({ nullable: true })
-  start_date!: string;
+  end_date!: string;
 
   @Field({ nullable: true })
-  end_date!: string;
+  start_date!: Date;
 }

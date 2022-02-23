@@ -4,12 +4,7 @@ import { getRepository, Repository } from "typeorm";
 import { User } from "../models/User";
 import { ProjectStates } from "../enums/ProjectStates";
 import { Status, StatusInput } from "../models/Status";
-
-const statusArray = [
-  { name: "To do" },
-  { name: "In progress" },
-  { name: "Done" },
-];
+import { defaultStatus } from "../utils/defaultStatus";
 
 @Resolver()
 export class ProjectResolver {
@@ -140,20 +135,9 @@ export class ProjectResolver {
     const project = await this.projectRepository.findOne(projectID, {
       relations: ["taskStatus"],
     });
-    //  const status = this.statusRepository.create({ name: "hi" });
 
-    // async function createStatus(item, statusRepo: Repository<Status>) {
-    //   const status = statusRepo.create(item);
-    //   // status.name = item.name;
-    //   status.project = project;
-    //   project.taskStatus.push(status);
-    //   await status.save();
-    // }
-
-    for (const item of statusArray) {
-      // await createStatus(item, this.statusRepository);
+    for (const item of defaultStatus) {
       const status = this.statusRepository.create(item);
-      // status.name = item.name;
       status.project = project;
       project.taskStatus.push(status);
       await status.save();

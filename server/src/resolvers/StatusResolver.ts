@@ -39,7 +39,7 @@ export class StatusResolver {
     @Arg("status", () => StatusInput) newStatusData: Status,
     @Arg("statusID") statusID: number
   ): Promise<Status | null> {
-    let status = await Status.findOne(statusID);
+    const status = await Status.findOne(statusID);
     if (status) {
       await this.statusRepository.update(statusID, newStatusData);
       await status.reload();

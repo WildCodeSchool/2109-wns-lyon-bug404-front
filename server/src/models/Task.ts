@@ -29,16 +29,21 @@ export class Task extends BaseEntity {
   description!: string;
 
   @Field()
-  @Column()
-  estimated_time!: string;
+  @Column({
+    type: "datetime",
+  })
+  due_date!: Date;
 
   @Field()
-  @Column()
-  created_at!: string;
+  @Column({
+    type: "datetime",
+    default: () => "NOW()",
+  })
+  created_at!: Date;
 
-  @Field()
-  @Column()
-  spent_time!: string;
+  // @Field()
+  // @Column()
+  // spent_time!: string;
 
   @Field()
   @ManyToOne(() => Status, (status) => status.tasks)
@@ -66,13 +71,10 @@ export class TaskInput extends BaseEntity {
   description!: string;
 
   @Field()
-  estimated_time!: string;
+  due_date!: Date;
 
-  @Field()
-  created_at!: string;
-
-  @Field()
-  spent_time!: string;
+  // @Field()
+  // spent_time!: string;
 }
 
 @InputType()
@@ -84,5 +86,8 @@ export class TaskUpdateInput extends BaseEntity {
   description!: string;
 
   @Field({ nullable: true })
-  spent_time!: string;
+  due_date!: Date;
+
+  // @Field({ nullable: true })
+  // spent_time!: string;
 }
