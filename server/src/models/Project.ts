@@ -8,8 +8,10 @@ import {
   ManyToOne,
   ManyToMany,
 } from "typeorm";
+import { ProjectStates } from "../enums/ProjectStates";
 import { Task } from "./Task";
 import { User } from "./User";
+import { Status } from "./Status";
 
 @ObjectType()
 @Entity()
@@ -31,16 +33,24 @@ export class Project extends BaseEntity {
   image_url!: string;
 
   @Field()
-  @Column()
-  start_date!: string;
+  @Column({
+    type: "datetime",
+  })
+  start_date!: Date;
 
   @Field()
-  @Column()
-  end_date!: string;
+  @Column({
+    type: "datetime",
+  })
+  end_date?: Date;
 
   @Field()
-  @Column({ default: false })
-  status!: boolean;
+  @Column({
+    type: "enum",
+    enum: ProjectStates,
+    default: ProjectStates.ON_TRACK,
+  })
+  state!: ProjectStates;
 
   @Field()
   @ManyToOne(() => User, (user) => user.id)
@@ -53,6 +63,10 @@ export class Project extends BaseEntity {
   @Field(() => [Task], { nullable: true })
   @OneToMany(() => Task, (task) => task.project, { lazy: true })
   tasks?: Task[];
+
+  @Field(() => [Status])
+  @OneToMany(() => Status, (status) => status.project)
+  taskStatus!: Status[];
 }
 
 @InputType()
@@ -67,13 +81,7 @@ export class ProjectInput extends BaseEntity {
   image_url!: string;
 
   @Field()
-  start_date!: string;
-
-  @Field()
-  end_date!: string;
-
-  @Field()
-  status: boolean;
+  start_date!: Date;
 }
 
 @InputType()
@@ -88,11 +96,8 @@ export class ProjectUpdateInput extends BaseEntity {
   image_url!: string;
 
   @Field({ nullable: true })
-  start_date!: string;
-
-  @Field({ nullable: true })
   end_date!: string;
 
   @Field({ nullable: true })
-  status: boolean;
+  start_date!: Date;
 }

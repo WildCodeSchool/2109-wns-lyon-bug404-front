@@ -5,9 +5,13 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   ManyToOne,
+  OneToMany,
+  ManyToMany,
 } from "typeorm";
 import { Project } from "./Project";
+import { Status } from "./Status";
 import { User } from "./User";
+import { Category } from "./Category";
 
 @ObjectType()
 @Entity()
@@ -25,24 +29,29 @@ export class Task extends BaseEntity {
   description!: string;
 
   @Field()
-  @Column()
-  estimated_time!: string;
+  @Column({
+    type: "datetime",
+  })
+  due_date!: Date;
 
   @Field()
-  @Column()
-  created_at!: string;
+  @Column({
+    type: "datetime",
+    default: () => "NOW()",
+  })
+  created_at!: Date;
+
+  // @Field()
+  // @Column()
+  // spent_time!: string;
 
   @Field()
-  @Column()
-  spent_time!: string;
+  @ManyToOne(() => Status, (status) => status.tasks)
+  status?: Status;
 
-  @Field()
-  @Column()
-  status!: string;
-
-  @Field()
-  @Column()
-  category!: string;
+  @Field(() => [Category], { nullable: true })
+  @ManyToMany(() => Category, (category) => category.tasks)
+  categories?: Category[];
 
   @Field()
   @ManyToOne(() => Project, (project) => project.tasks, { lazy: true })
@@ -62,19 +71,10 @@ export class TaskInput extends BaseEntity {
   description!: string;
 
   @Field()
-  estimated_time!: string;
+  due_date!: Date;
 
-  @Field()
-  created_at!: string;
-
-  @Field()
-  spent_time!: string;
-
-  @Field()
-  status!: string;
-
-  @Field()
-  category!: string;
+  // @Field()
+  // spent_time!: string;
 }
 
 @InputType()
@@ -86,8 +86,8 @@ export class TaskUpdateInput extends BaseEntity {
   description!: string;
 
   @Field({ nullable: true })
-  status!: string;
+  due_date!: Date;
 
-  @Field({ nullable: true })
-  spent_time!: string;
+  // @Field({ nullable: true })
+  // spent_time!: string;
 }

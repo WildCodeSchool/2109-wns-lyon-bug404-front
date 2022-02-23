@@ -8,6 +8,7 @@ import {
   ManyToMany,
   JoinTable,
 } from "typeorm";
+import { UserRole } from "../enums/UserRole";
 import { Project } from "./Project";
 import { Task } from "./Task";
 
@@ -26,6 +27,14 @@ export class User extends BaseEntity {
   @Column()
   password!: string;
 
+  @Field()
+  @Column()
+  firstName!: string;
+
+  @Field()
+  @Column()
+  familyName!: string;
+
   @Field(() => [Project], { nullable: true })
   @OneToMany(() => Project, (project) => project.created_by)
   projects?: Project[];
@@ -38,6 +47,14 @@ export class User extends BaseEntity {
   @Field(() => [Task], { nullable: true })
   @OneToMany(() => Task, (task) => task.assigned_to)
   assigned_tasks?: Task[];
+
+  @Field()
+  @Column({
+    type: "enum",
+    enum: UserRole,
+    default: UserRole.USER,
+  })
+  role: UserRole;
 }
 
 @InputType()
@@ -46,5 +63,26 @@ export class UserInput {
   email!: string;
 
   @Field()
+  password!: string;
+
+  @Field()
+  @Column()
+  firstName!: string;
+
+  @Field()
+  @Column()
+  familyName!: string;
+}
+
+@InputType()
+export class UserUpdateInput {
+  @Field({ nullable: true })
+  email?: string;
+}
+
+@InputType()
+export class ResetPasswordInput extends BaseEntity {
+  @Field({ nullable: true })
+  @Column()
   password!: string;
 }
