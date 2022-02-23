@@ -20,7 +20,6 @@ export async function bootstrap() {
     ssl: {
       rejectUnauthorized: false,
     },
-
     // logging: ["query", "error"],
   });
 
@@ -44,9 +43,9 @@ export async function bootstrap() {
       };
     },
   });
-
+  
   const { url } = await server.listen(config.port);
-  console.log(`Server is running, GraphQL Playground available at ${url}`);
+  console.log(`Server is running, GraphQL Playund available at ${url}`);
 }
 
 bootstrap();
