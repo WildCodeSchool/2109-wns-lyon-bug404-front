@@ -1,0 +1,13 @@
+.auth-form {
+  max-width: 400px;
+  margin: auto;
+}
+.login-page {
+  background-image: url("../../assets/loginImage.png");
+  background-size: cover;
+  background-position: left;
+}
+
+.form-input {
+  @apply appearance-none rounded-none relative block w-full px-3  border border-gray-300 placeholder-gray-500 text-gray-900;
+}
