@@ -25,9 +25,9 @@ export const TaskList = () => {
     <div className="flex flex-col">
       {tasks && (
         <>
-          {tasks.slice(0, 3).map((task: TaskInterface) => (
+          {/* {tasks.slice(0, 3).map((task: TaskInterface) => (
             <TaskCard task={task} />
-          ))}
+          ))} */}
         </>
       )}
     </div>

@@ -26,7 +26,7 @@ export const ProjectBadge = ({ state }: { state: string }): JSX.Element => {
   return (
     <div>
       <span className="badge" style={{ backgroundColor: backgroundColor }}>
-        {state.charAt(0).toUpperCase() + state.slice(1)}
+        {state}
       </span>
     </div>
   );

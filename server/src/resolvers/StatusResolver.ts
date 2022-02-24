@@ -47,4 +47,17 @@ export class StatusResolver {
     }
     return null;
   }
+
+  // get status byt project ID
+  @Query(() => [Status])
+  async getStatusByProjectID(
+    @Arg("projectID") projectID: number
+  ): Promise<Status[]> {
+    return await this.statusRepository.find({
+      where: {
+        project: projectID,
+      },
+      relations: ["project", "tasks"],
+    });
+  }
 }

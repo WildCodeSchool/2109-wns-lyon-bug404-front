@@ -4,14 +4,16 @@ import { ProjectSection } from "./project/ProjectSection";
 import { TaskSection } from "./task/TaskSection";
 const Dashboard = () => {
   return (
-    <div className="flex flex-row w-screen">
+    <div className="flex flex-row w-screen h-screen ">
       <div className="basis-1/5">
         <Sidebar />
       </div>
-      <div className="basis-4/5 flex flex-col">
+      <div className="basis-4/5 flex flex-col overflow-y-scroll">
         <Nav page={"Home"} />
-        <ProjectSection />
-        <TaskSection />
+        <div className=" ">
+          <ProjectSection />
+          <TaskSection />
+        </div>
       </div>
     </div>
   );
