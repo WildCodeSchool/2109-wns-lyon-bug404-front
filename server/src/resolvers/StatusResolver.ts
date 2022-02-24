@@ -35,7 +35,7 @@ export class StatusResolver {
   }
 
   //   update status
-  @Mutation(() => Status!) async updateProject(
+  @Mutation(() => Status!) async updateTaskStatus(
     @Arg("status", () => StatusInput) newStatusData: Status,
     @Arg("statusID") statusID: number
   ): Promise<Status | null> {

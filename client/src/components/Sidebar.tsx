@@ -25,7 +25,13 @@ const Sidebar = () => {
         {/* nav links */}
 
         <div className="flex-1 min-w-0 mx-auto mt-4 px-2">
-          <button type="button" className="dashboardBtn ">
+          <button
+            type="button"
+            className="dashboardBtn "
+            onClick={() => {
+              navigate(`/dashboard`);
+            }}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6 text-white group-hover:text-red-400 mr-2"
@@ -59,7 +65,13 @@ const Sidebar = () => {
             </svg>
             Calendar
           </button>
-          <button type="button" className="dashboardBtn ">
+          <button
+            type="button"
+            className="dashboardBtn "
+            onClick={() => {
+              navigate(`/projects`);
+            }}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6 text-white group-hover:text-red-400 mr-2"

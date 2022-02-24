@@ -28,3 +28,9 @@ export const SIGNUP = gql`
     }
   }
 `;
+
+// export const GET_PROFILE = gql`|
+//   mutation GetProfile() {
+//     getProfile()
+//   }
+// `
