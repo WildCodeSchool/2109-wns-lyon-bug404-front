@@ -1,111 +1,54 @@
-import React, { useEffect } from "react";
+import { format } from "date-fns";
 
 interface TaskInterface {
   id: number;
   title: string;
   due_date: Date;
-  project: [
-    {
-      title: string;
-    }
-  ];
+  project: {
+    title: string;
+  };
 }
 
 export const TaskCard = ({ task }: { task: TaskInterface }) => {
-  // useEffect(() => {
-  //   console.log(task.project.title);
-  // });
-
   return (
-    <div className="max-w-sm w-full lg:max-w-full lg:flex">
-      <div className="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
-        <div className="mb-8">
-          <div className="text-gray-900 font-bold text-xl mb-2">
-            {task.title}
+    <div className="px-5">
+      <div className="cardTask">
+        <div className=" flex flex-row items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-10  ml-2 stroke-stone-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+
+          <div className="flex flex-col ml-2">
+            <div className="text-gray-900 font-bold ">{task.title}</div>
+            <div className="grid grid-flow-col-dense  ">
+              <p className="text-gray-700 text-base">
+                From project : {task.project.title}
+              </p>
+            </div>
           </div>
-          {/* <p className="text-gray-700 text-base">{task.project.title}</p> */}
         </div>
-        <div className="flex items-center">
-          <div className="text-sm">
-            <p className="text-gray-900 leading-none">Jonathan Reinink</p>
-            <p className="text-gray-600">Aug 18</p>
-          </div>
+        <div className="text-sm  p-2  items-center flex flex-col justify-center mr-2">
+          <p className="text-primary font-bold text-2xl">
+            {/* {new Date(task.due_date).getMonth()} */}
+            {format(new Date(task.due_date), "dd")}
+          </p>
+          <p className="text-black -mt-2">
+            {/* {new Date(task.due_date).getMonth()} */}
+            {format(new Date(task.due_date), "MMMM")}
+          </p>
         </div>
       </div>
     </div>
   );
 };
-
-/*
-<div
-      className="fixed z-10 inset-0 overflow-y-auto"
-      aria-labelledby="modal-title"
-      role="dialog"
-      aria-modal="true"
-    >
-      <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div
-          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-          aria-hidden="true"
-        ></div>
-        <span
-          className="hidden sm:inline-block sm:align-middle sm:h-screen"
-          aria-hidden="true"
-        >
-          &#8203;
-        </span>
-        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-          <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div className="sm:flex sm:items-start">
-              <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                <svg
-                  className="h-6 w-6 text-red-600"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                  />
-                </svg>
-              </div>
-              <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                <h3
-                  className="text-lg leading-6 font-medium text-gray-900"
-                  id="modal-title"
-                >
-                  Deactivate account
-                </h3>
-                <div className="mt-2">
-                  <p className="text-sm text-gray-500">
-                    Are you sure you want to deactivate your account? All of
-                    your data will be permanently removed. This action cannot be
-                    undone.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-            <button
-              type="button"
-              className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
-            >
-              Deactivate
-            </button>
-            <button
-              type="button"
-              className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      </div>
-    </div> 
-    */

@@ -7,11 +7,9 @@ interface TaskInterface {
   id: number;
   title: string;
   due_date: Date;
-  project: [
-    {
-      title: string;
-    }
-  ];
+  project: {
+    title: string;
+  };
 }
 
 export const TaskList = () => {
@@ -25,9 +23,9 @@ export const TaskList = () => {
     <div className="flex flex-col">
       {tasks && (
         <>
-          {/* {tasks.slice(0, 3).map((task: TaskInterface) => (
+          {tasks.slice(0, 3).map((task: TaskInterface) => (
             <TaskCard task={task} />
-          ))} */}
+          ))}
         </>
       )}
     </div>

@@ -3,7 +3,7 @@ import { TaskList } from "./TaskList";
 
 export const TaskSection = () => {
   return (
-    <section>
+    <section className="pb-3">
       <header className="bg-white space-y-4 p-4 sm:px-8 sm:py-6 lg:p-4 xl:px-8 xl:py-6">
         <div className="flex items-center justify-between">
           <div className="flex flex-row justify-start items-center my-4">
@@ -21,7 +21,7 @@ export const TaskSection = () => {
                 d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
               />
             </svg>
-            <h2 className="font-bold text-secondary-100 mt-1">Lastest tasks</h2>
+            <h2 className="font-bold text-secondary-100 mt-1">Latest tasks</h2>
           </div>
 
           <button type="button" className="secondaryBtn bg-secondary-100">
