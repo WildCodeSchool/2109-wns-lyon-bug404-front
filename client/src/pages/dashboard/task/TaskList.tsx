@@ -2,15 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_TASKS } from "../../../api/queries/Task";
 import { TaskCard } from "./TaskCard";
-
-interface TaskInterface {
-  id: number;
-  title: string;
-  due_date: Date;
-  project: {
-    title: string;
-  };
-}
+import { TaskDashboardInterface } from "../../../interfaces/TaskDashboardInterface";
 
 export const TaskList = () => {
   const [tasks, setTasks] = useState([]);
@@ -23,7 +15,7 @@ export const TaskList = () => {
     <div className="flex flex-col">
       {tasks && (
         <>
-          {tasks.slice(0, 3).map((task: TaskInterface) => (
+          {tasks.slice(0, 3).map((task: TaskDashboardInterface) => (
             <TaskCard task={task} />
           ))}
         </>

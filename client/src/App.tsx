@@ -9,6 +9,7 @@ import Login from "./pages/login/Login";
 import { ProjectDetails } from "./pages/project/ProjectDetails";
 import { Projects } from "./pages/project/Projects";
 import { Redirect } from "./pages/signup/Redirect";
+import { Confirm } from "./pages/signup/Confirm";
 import Signup from "./pages/signup/Signup";
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/redirect" element={<Redirect />} />
             <Route path="/projects" element={<Projects />} />
+            <Route path="/user/confirm/:token" element={<Confirm />} />
             <Route path="/projects/:id" element={<ProjectDetails />} />
           </Routes>
         </div>

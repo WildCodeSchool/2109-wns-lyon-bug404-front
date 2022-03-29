@@ -1,15 +1,7 @@
 import { format } from "date-fns";
+import { TaskDashboardInterface } from "../../../interfaces/TaskDashboardInterface";
 
-interface TaskInterface {
-  id: number;
-  title: string;
-  due_date: Date;
-  project: {
-    title: string;
-  };
-}
-
-export const TaskCard = ({ task }: { task: TaskInterface }) => {
+export const TaskCard = ({ task }: { task: TaskDashboardInterface }) => {
   return (
     <div className="px-5">
       <div className="cardTask">
@@ -40,7 +32,6 @@ export const TaskCard = ({ task }: { task: TaskInterface }) => {
         </div>
         <div className="text-sm  p-2  items-center flex flex-col justify-center mr-2">
           <p className="text-primary font-bold text-2xl">
-            {/* {new Date(task.due_date).getMonth()} */}
             {format(new Date(task.due_date), "dd")}
           </p>
           <p className="text-black -mt-2">

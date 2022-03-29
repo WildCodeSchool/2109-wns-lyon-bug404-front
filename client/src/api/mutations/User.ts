@@ -29,6 +29,12 @@ export const SIGNUP = gql`
   }
 `;
 
+export const CONFIRM_USER = gql`
+  mutation ConfirmUser($token: String!) {
+    confirmUser(token: $token)
+  }
+`;
+
 // export const GET_PROFILE = gql`|
 //   mutation GetProfile() {
 //     getProfile()

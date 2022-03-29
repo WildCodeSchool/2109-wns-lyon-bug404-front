@@ -1,4 +1,5 @@
 import React from "react";
+import { Create } from "./create/Create";
 import { ProjectList } from "./ProjectList";
 
 export const ProjectSection = () => {
@@ -35,6 +36,7 @@ export const ProjectSection = () => {
             </svg>
             Add project
           </button>
+          <Create />
         </div>
       </header>
 

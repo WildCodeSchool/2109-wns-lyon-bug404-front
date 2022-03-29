@@ -55,6 +55,10 @@ export class User extends BaseEntity {
     default: UserRole.USER,
   })
   role: UserRole;
+
+  @Field()
+  @Column("bool", { default: false })
+  confirmed: boolean;
 }
 
 @InputType()

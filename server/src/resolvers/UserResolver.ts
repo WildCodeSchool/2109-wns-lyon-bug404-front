@@ -12,6 +12,9 @@ import { ResetPasswordInput, User, UserUpdateInput } from "../models/User";
 import * as argon2 from "argon2";
 import * as jwt from "jsonwebtoken";
 import { UserRole } from "../enums/UserRole";
+import sendEmail from "../utils/sendEmail";
+import { createConfirmationUrl } from "../utils/createConfirmationUrl";
+import { EmailInterface } from "../../interface/EmailInterface";
 
 @Resolver(User)
 export class UsersResolver {
@@ -47,10 +50,22 @@ export class UsersResolver {
         password: await argon2.hash(password),
       });
       newUser.assigned_tasks = [];
+
+      const validateUrl = await createConfirmationUrl(email);
+      const emailObject: EmailInterface = {
+        from: "noreply@taskhub.com", // sender address
+        to: email, // list of receivers
+        subject: "Confirmation compte TaskHub", // Subject line
+        text: "Veuillez cliquer sur le lien pour confirmer votre adresse email.", // plain text body
+        html: `<p>Veuillez cliquer sur le lien pour confirmer votre adresse email.</p><a href="${validateUrl}">${validateUrl}</a>`, // html body
+      };
+
+      await sendEmail(emailObject);
       await newUser.save();
+
       return newUser;
     } catch (e) {
-      return new Error("User already exists");
+      return e;
     }
   }
 
@@ -62,15 +77,31 @@ export class UsersResolver {
   ): Promise<string> {
     const user = await this.userRepo.findOne({ email });
 
-    if (user) {
+    if (user && user.confirmed) {
       if (await argon2.verify(user.password, password)) {
-        const token = jwt.sign({ userId: user.id }, "supersecret");
+        const token = jwt.sign({ userId: user.id }, "supersecret", {
+          expiresIn: "24h", // expires in 24 hours
+        });
         return token;
       } else {
         return null;
       }
     } else {
       return null;
+    }
+  }
+
+  // Confirm user email
+  @Mutation(() => Boolean)
+  async confirmUser(@Arg("token") token: string): Promise<boolean> {
+    try {
+      const decoded = jwt.verify(token, "supersecret", {
+        expiresIn: "24h", // expires in 24 hours
+      });
+      await User.update({ email: decoded.email }, { confirmed: true });
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 
