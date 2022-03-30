@@ -146,19 +146,21 @@ export class UsersResolver {
   }
 
   // reset password
-  @Mutation(() => User!, { nullable: true })
+  @Mutation(() => Boolean)
   async resetUserPassword(
     @Arg("reset", () => ResetPasswordInput) reset: ResetPasswordInput,
-    @Arg("id", () => ID) id: number
-  ): Promise<User | null> {
-    let user = await this.userRepo.findOne(id);
-
-    if (user) {
-      user.password = await argon2.hash(reset.password);
-      await user.reload();
-      return user;
+    @Arg("token") token: string
+  ): Promise<boolean> {
+    try {
+      const decoded = jwt.verify(token, "supersecret", {
+        expiresIn: "24h", // expires in 24 hours
+      });
+      let newPassword = await argon2.hash(reset.password);
+      await User.update({ email: decoded.email }, { password: newPassword });
+      return true;
+    } catch (e) {
+      return false;
     }
-    return null;
   }
 
   // Forgot password

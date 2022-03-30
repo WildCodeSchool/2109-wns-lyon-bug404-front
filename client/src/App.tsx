@@ -11,6 +11,8 @@ import { Projects } from "./pages/project/Projects";
 import { Redirect } from "./pages/signup/Redirect";
 import { Confirm } from "./pages/signup/Confirm";
 import Signup from "./pages/signup/Signup";
+import { ForgotPassword } from "./pages/forgotPassword/ForgotPassword";
+import ResetPassword from "./pages/forgotPassword/ResetPassword";
 
 function App() {
   return (
@@ -25,7 +27,12 @@ function App() {
             <Route path="/redirect" element={<Redirect />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/user/confirm/:token" element={<Confirm />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/projects/:id" element={<ProjectDetails />} />
+            <Route
+              path="/user/reset-password/:token"
+              element={<ResetPassword />}
+            />
           </Routes>
         </div>
       </BrowserRouter>

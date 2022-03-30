@@ -4,7 +4,8 @@ import Header from "../../components/Header";
 import { useParams } from "react-router-dom";
 import { CONFIRM_USER } from "../../api/mutations/User";
 import { useMutation } from "@apollo/client";
-const redirectImage = require("../../assets/redirect.png");
+const confirmSuccess = require("../../assets/confirmSuccess.png");
+const confirmError = require("../../assets/confirmError.png");
 
 export const Confirm = () => {
   const { token } = useParams();
@@ -19,10 +20,9 @@ export const Confirm = () => {
       });
     }
 
-    // setTokenIsValid(data);
-    // setTimeout(() => {
-    //   navigate("/");
-    // }, 6000);
+    setTimeout(() => {
+      navigate("/login");
+    }, 6000);
   }, [token]);
 
   useEffect(() => {
@@ -34,20 +34,28 @@ export const Confirm = () => {
   return (
     <div className="h-screen landing-page ">
       <Header />
-      {tokenIsValid ? <p>token valid</p> : <p>non valid</p>}
-      {/* <div className="grid grid-cols-2 gap-4 h-1/2 w-1/2 m-auto">
+      <div className="grid grid-cols-2 gap-4 h-1/2 w-1/2 m-auto">
         <div>
-          <img className="cover" src={redirectImage} alt="" />
+          <img
+            className="object-cover sm:h-72 md:h-96  lg:h-5/6 mx-auto"
+            src={tokenIsValid ? confirmSuccess : confirmError}
+            alt=""
+          />
         </div>
 
         <div className="flex justify-center justify-items-center m-auto">
           {" "}
           <h3 className="text-center text-lg font-bold h-1/3">
-            A confirmation mail has been sent to you, please confirm your email
-            address
+            {tokenIsValid ? (
+              <>Your mail is confirmed, you can now log with your new account</>
+            ) : (
+              <>
+                <p className="text-xl">404</p> NOT FOUND
+              </>
+            )}
           </h3>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };

@@ -35,6 +35,20 @@ export const CONFIRM_USER = gql`
   }
 `;
 
+// Forgot password
+export const FORGOT_PASSWORD = gql`
+  mutation ForgotPassword($email: String!) {
+    forgotPassword(email: $email)
+  }
+`;
+
+// reset password
+export const RESET_PASSWORD = gql`
+  mutation ResetUserPassword($token: String!, $reset: ResetPasswordInput!) {
+    resetUserPassword(token: $token, reset: $reset)
+  }
+`;
+
 // export const GET_PROFILE = gql`|
 //   mutation GetProfile() {
 //     getProfile()

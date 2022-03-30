@@ -43,7 +43,7 @@ export async function bootstrap() {
       };
     },
   });
-  
+
   const { url } = await server.listen(config.port);
   console.log(`Server is running, GraphQL Playund available at ${url}`);
 }
