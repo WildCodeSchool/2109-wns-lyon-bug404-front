@@ -51,7 +51,7 @@ export class UsersResolver {
       });
       newUser.assigned_tasks = [];
 
-      const validateUrl = await createConfirmationUrl(email);
+      const validateUrl = await createConfirmationUrl(email, "confirm");
       const emailObject: EmailInterface = {
         from: "noreply@taskhub.com", // sender address
         to: email, // list of receivers
@@ -159,5 +159,24 @@ export class UsersResolver {
       return user;
     }
     return null;
+  }
+
+  // Forgot password
+  @Mutation(() => Boolean)
+  async forgotPassword(@Arg("email") email: string): Promise<boolean> {
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return true;
+    }
+    const validateUrl = await createConfirmationUrl(email, "reset-password");
+    const emailObject: EmailInterface = {
+      from: "noreply@taskhub.com", // sender address
+      to: email, // list of receivers
+      subject: "Mot de pass oublier", // Subject line
+      text: "Veuillez cliquer sur le lien pour réinitialiser votre mot de passe.", // plain text body
+      html: `<a href="${validateUrl}">${validateUrl}</a>`, // html body
+    };
+    await sendEmail(emailObject);
+    return true;
   }
 }

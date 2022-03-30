@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
 import { useParams } from "react-router-dom";
@@ -10,6 +10,7 @@ export const Confirm = () => {
   const { token } = useParams();
   const navigate = useNavigate();
   const [doConfirmUser, { data, loading, error }] = useMutation(CONFIRM_USER);
+  const [tokenIsValid, setTokenIsValid] = useState(false);
 
   useEffect(() => {
     if (token) {
@@ -17,15 +18,24 @@ export const Confirm = () => {
         variables: { token },
       });
     }
+
+    // setTokenIsValid(data);
     // setTimeout(() => {
     //   navigate("/");
     // }, 6000);
   }, [token]);
 
+  useEffect(() => {
+    if (data) {
+      setTokenIsValid(data.confirmUser);
+    }
+  }, [data]);
+
   return (
     <div className="h-screen landing-page ">
       <Header />
-      <div className="grid grid-cols-2 gap-4 h-1/2 w-1/2 m-auto">
+      {tokenIsValid ? <p>token valid</p> : <p>non valid</p>}
+      {/* <div className="grid grid-cols-2 gap-4 h-1/2 w-1/2 m-auto">
         <div>
           <img className="cover" src={redirectImage} alt="" />
         </div>
@@ -37,7 +47,7 @@ export const Confirm = () => {
             address
           </h3>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
