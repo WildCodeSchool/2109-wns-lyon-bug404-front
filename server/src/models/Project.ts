@@ -82,6 +82,9 @@ export class ProjectInput extends BaseEntity {
 
   @Field()
   start_date!: Date;
+
+  @Field()
+  end_date!: Date;
 }
 
 @InputType()

@@ -16,7 +16,7 @@ export class ProjectResolver {
   @Query(() => [Project])
   async getProjects(): Promise<Project[]> {
     return await this.projectRepository.find({
-      relations: ["assigned_users"],
+      relations: ["assigned_users", "created_by"],
     });
   }
 
@@ -26,7 +26,7 @@ export class ProjectResolver {
     @Arg("projectID") projectID: number
   ): Promise<Project | undefined | null> {
     return await this.projectRepository.findOne(projectID, {
-      relations: ["assigned_users"],
+      relations: ["assigned_users", "created_by"],
     });
   }
 
@@ -67,7 +67,6 @@ export class ProjectResolver {
   ): Promise<Project | null> {
     let project = await Project.findOne(projectID);
     if (project) {
-      console.log(newProjectData);
       await this.projectRepository.update(projectID, newProjectData);
       await project.reload();
       return project;

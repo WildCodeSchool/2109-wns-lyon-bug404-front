@@ -20,7 +20,7 @@ export class User extends BaseEntity {
   id!: number;
 
   @Field()
-  @Column()
+  @Column({ unique: true })
   email!: string;
 
   @Field()
@@ -55,6 +55,10 @@ export class User extends BaseEntity {
     default: UserRole.USER,
   })
   role: UserRole;
+
+  @Field()
+  @Column("bool", { default: false })
+  confirmed: boolean;
 }
 
 @InputType()

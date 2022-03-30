@@ -35,7 +35,7 @@ export class StatusResolver {
   }
 
   //   update status
-  @Mutation(() => Status!) async updateProject(
+  @Mutation(() => Status!) async updateTaskStatus(
     @Arg("status", () => StatusInput) newStatusData: Status,
     @Arg("statusID") statusID: number
   ): Promise<Status | null> {
@@ -46,5 +46,18 @@ export class StatusResolver {
       return status;
     }
     return null;
+  }
+
+  // get status byt project ID
+  @Query(() => [Status])
+  async getStatusByProjectID(
+    @Arg("projectID") projectID: number
+  ): Promise<Status[]> {
+    return await this.statusRepository.find({
+      where: {
+        project: projectID,
+      },
+      relations: ["project", "tasks"],
+    });
   }
 }

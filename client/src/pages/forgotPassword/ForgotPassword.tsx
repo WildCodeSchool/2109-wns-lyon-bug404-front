@@ -1,52 +1,50 @@
-import { useMutation } from "@apollo/client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { SIGNIN } from "../../api/mutations/User";
-//components
 import Header from "../../components/Header";
-//styles and assets
-import "./Login.css";
-const loginIllustration = require("../../assets/loginIllustration.png");
+
+import { useMutation } from "@apollo/client";
+import { FORGOT_PASSWORD } from "../../api/mutations/User";
+const forgotllustration = require("../../assets/forgot-password.png");
 const loingLogo = require("../../assets/loginLogo.png");
 
-export default function Login(): JSX.Element {
+export const ForgotPassword = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [failed, setFailed] = useState(false);
-  const [doSignin, { data, loading, error }] = useMutation(SIGNIN);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [sendForgotPassword, { data, loading, error }] =
+    useMutation(FORGOT_PASSWORD);
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    setFailed(false);
-    const result = await doSignin({
-      variables: {
-        email: email,
-        password: password,
-      },
-    });
-    if (result.data.signin) {
-      // success
-      localStorage.setItem("token", result.data.signin);
-      navigate("/dashboard");
-    } else {
-      // failed
-      setFailed(true);
+
+    if (!email) {
+      throw setErrorMessage("All fields are required");
+    }
+
+    try {
+      const result = await sendForgotPassword({
+        variables: {
+          email,
+        },
+      });
+      console.log(result);
+      if (result.data.forgotPassword) {
+        // success
+        navigate("/redirect");
+      }
+    } catch (error: any) {
+      throw setErrorMessage(error.message);
     }
   };
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
   return (
-    <div className="login-page h-screen ">
+    <div className="h-screen landing-page ">
       <Header />
       <div className="flex flex-row  max-w-4xl  mx-auto -mt-20 ">
         <div className="basis-1/2 flex items-center ">
           <img
             className=" object-cover sm:h-72 md:h-96  lg:h-5/6 mx-auto "
-            src={loginIllustration}
+            src={forgotllustration}
             alt=""
           />
         </div>
@@ -69,32 +67,13 @@ export default function Login(): JSX.Element {
                 className="form-input"
               />
             </label>
-            <label>
-              <input
-                required
-                type="password"
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
-                placeholder="Password "
-                className="form-input"
-              />
-            </label>
+
             {error && (
               <p className="text-sm font-medium text-red-500">
                 {error.message}
               </p>
             )}
 
-            <div className="flex items-center justify-between">
-              <div className="text-sm my-2 mt-8">
-                <Link
-                  to="/forgot-password"
-                  className="font-medium text-black hover:text-red-00"
-                >
-                  Forgot your password?
-                </Link>
-              </div>
-            </div>
             <button
               disabled={loading === true}
               type="submit"
@@ -115,23 +94,11 @@ export default function Login(): JSX.Element {
                   />
                 </svg>
               </span>
-              Sign in
+              Get new password
             </button>
           </form>
-
-          <div className="mt-1 justify-center flex ">
-            <p className="text-sm font-medium ">
-              Not yet a member ? &nbsp;
-              <Link
-                to="/signup"
-                className="font-medium text-secondary-100 hover:text-red-00"
-              >
-                Sign up.
-              </Link>
-            </p>
-          </div>
         </div>
       </div>
     </div>
   );
-}
+};
