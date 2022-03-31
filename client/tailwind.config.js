@@ -15,5 +15,6 @@ module.exports = {
     require("tailwindcss"),
     require("autoprefixer"),
     require("@tailwindcss/forms"),
+    require("flowbite/plugin"),
   ],
 };

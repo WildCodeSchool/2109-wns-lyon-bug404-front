@@ -1,82 +1,207 @@
-import React from "react";
+import { useMutation } from "@apollo/client";
+import React, { useState } from "react";
+import { CREATE_PROJECT } from "../../../../api/mutations/Project";
+import Modal from "../../../../layout/Modal";
 
-export const Create = (): JSX.Element => {
+const Create = () => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [createdBy, setCretedBy] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [doCreateProject, { data, loading, error }] =
+    useMutation(CREATE_PROJECT);
+
+  const handleClose = () => {
+    setShowModal(false);
+  };
+  const handleOpen = () => {
+    setShowModal(true);
+  };
+
+  const handleSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    // setErrorMessage("");
+    // if (!firstName || !familyName || !email || !password || !confirmPassword) {
+    //   throw setErrorMessage("All fields are required");
+    // }
+    // if (password !== confirmPassword) {
+    //   throw setErrorMessage("Passwords don't match");
+    // }
+    try {
+      const result = await doCreateProject({
+        variables: {
+          project: {
+            title: title,
+            description: description,
+            image_url: "url super url",
+            start_date: startDate,
+            end_date: endDate,
+          },
+          userId: 2,
+        },
+      });
+      if (result.data) {
+        // success
+        console.log(result.data.createProject);
+      }
+    } catch (error: any) {
+      // throw setErrorMessage(error.message);
+      console.log(error);
+    }
+  };
   return (
     <>
       <button
-        className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         type="button"
-        data-modal-toggle="defaultModal"
+        className="secondaryBtn bg-secondary-100"
+        onClick={handleOpen}
       >
-        Toggle modal
+        <svg
+          width="20"
+          height="20"
+          fill="currentColor"
+          className="mr-2"
+          aria-hidden="true"
+        >
+          <path d="M10 5a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-3v3a1 1 0 1 1-2 0v-3H6a1 1 0 1 1 0-2h3V6a1 1 0 0 1 1-1Z" />
+        </svg>
+        Add project
       </button>
-
-      <div
-        id="defaultModal"
-        tabIndex={1}
-        aria-hidden="true"
-        className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full"
-      >
-        <div className="relative p-4 w-full max-w-2xl h-full md:h-auto">
-          <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-            <div className="flex justify-between items-start p-5 rounded-t border-b dark:border-gray-600">
-              <h3 className="text-xl font-semibold text-gray-900 lg:text-2xl dark:text-white">
-                Terms of Service
-              </h3>
-              <button
-                type="button"
-                className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                data-modal-toggle="defaultModal"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
+      {showModal && (
+        <Modal handleClose={handleClose}>
+          <div className="flex flex-col ">
+            <h2 className=" font-bold text-3xl text-zinc-700 mt-1 mx-auto">
+              New project
+            </h2>
+            <form className="">
+              <div className="">
+                <label className=" text-sm font-medium text-gray-700 -mb-1">
+                  Title:
+                </label>
+                <input
+                  required
+                  type="text"
+                  onChange={(e) => setTitle(e.target.value)}
+                  value={title}
+                  className="focus:ring-zinc-700 focus:border-zinc-700 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="about"
+                  className="text-sm font-medium text-gray-700 -mb-1"
                 >
-                  <path
-                    fill-rule="evenodd"
-                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-              </button>
-            </div>
+                  Description
+                </label>
+                <div className="mt-1">
+                  <textarea
+                    id="description"
+                    name="description"
+                    rows={2}
+                    className="shadow-sm focus:ring-zinc-700 focus:border-zinc-700 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
+                    placeholder="Super project..."
+                    onChange={(e) => setDescription(e.target.value)}
+                    value={description}
+                  />
+                </div>
+              </div>
 
-            <div className="p-6 space-y-6">
-              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                With less than a month to go before the European Union enacts
-                new consumer privacy laws for its citizens, companies around the
-                world are updating their terms of service agreements to comply.
-              </p>
-              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                The European Union’s General Data Protection Regulation
-                (G.D.P.R.) goes into effect on May 25 and is meant to ensure a
-                common set of data rights in the European Union. It requires
-                organizations to notify users as soon as possible of high-risk
-                data breaches that could personally affect them.
-              </p>
-            </div>
+              {/* date picker */}
 
-            <div className="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
+              <div date-rangepicker className="flex flex-col mt-4">
+                <div className="relative">
+                  <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                    <svg
+                      className="w-5 h-5 text-gray-500 dark:text-gray-400 mt-4"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </div>{" "}
+                  <label
+                    htmlFor="about"
+                    className="text-sm font-medium text-gray-700 "
+                  >
+                    Start date
+                    <input
+                      // datepicker
+                      name="start"
+                      type="date"
+                      min={new Date().toISOString().split("T")[0]}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-zinc-700 focus:border-zinc-700 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Select date start"
+                      onChange={(e) => setStartDate(e.target.value)}
+                      value={startDate}
+                    />
+                  </label>
+                </div>
+
+                <div className="relative -mt-6">
+                  <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                    <svg
+                      className="w-5 h-5 text-gray-500 dark:text-gray-400 mt-4"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </div>
+                  <label
+                    htmlFor="about"
+                    className="text-sm font-medium text-gray-700 "
+                  >
+                    End date
+                    <input
+                      name="end"
+                      type="date"
+                      min={
+                        startDate
+                          ? new Date(startDate).toISOString().split("T")[0]
+                          : new Date().toISOString().split("T")[0]
+                      }
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-zinc-700 focus:border-zinc-700 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Select date end"
+                      onChange={(e) => setEndDate(e.target.value)}
+                      value={endDate}
+                    />
+                  </label>
+                </div>
+              </div>
+            </form>
+            <div className="flex justify-around mt-4">
               <button
-                data-modal-toggle="defaultModal"
-                type="button"
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                onClick={handleClose}
+                className="justify-center secondaryBtn w-32 bg-zinc-500"
               >
-                I accept
+                Close
               </button>
               <button
-                data-modal-toggle="defaultModal"
                 type="button"
-                className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+                className="justify-center secondaryBtn w-32 bg-secondary-100"
+                onClick={handleSubmit}
               >
-                Decline
+                Add
               </button>
             </div>
           </div>
-        </div>
-      </div>
+        </Modal>
+      )}
     </>
   );
 };
+
+export default Create;
