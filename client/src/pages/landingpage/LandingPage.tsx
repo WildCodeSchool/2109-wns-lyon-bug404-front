@@ -14,7 +14,7 @@ export default function LandingPage(): JSX.Element {
         <div className=" lg:text-left lg:max-w-2xl lg:w-full mt-20">
           <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
             <span className="block xl:inline">
-              Hello Simplify work and get,{' '}
+              test2 Simplify work and get,{' '}
             </span>
             <span className="block text-primary xl:inline">more </span>done.
           </h1>
