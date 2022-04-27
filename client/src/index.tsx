@@ -1,13 +1,13 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "./index.css";
-import "flowbite";
-import App from "./App";
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import 'flowbite';
+import App from './App';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
 const client = new ApolloClient({
-  uri: "http://localhost:4001/",
-  cache: new InMemoryCache(),
+  uri: 'https://taskhub.lyon1-0921.wns.wilders.dev/graphql/',
+  cache: new InMemoryCache()
 });
 
 ReactDOM.render(
@@ -16,5 +16,5 @@ ReactDOM.render(
       <App />
     </ApolloProvider>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById('root')
 );
