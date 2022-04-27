@@ -11,7 +11,7 @@ services:
     build:
       context: ./server
       dockerfile: dev.dockerfile
-    container_name: 404bugs_server
+    # container_name: 404bugs_server
     ports:
       - 4000:4000
     networks:
@@ -33,6 +33,7 @@ services:
     volumes:
       - ./client/src:/app/src
       - ./client/public:/app/public
+
   db:
     image: mariadb
     container_name: 404bugs_db
