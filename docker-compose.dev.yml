@@ -23,6 +23,8 @@ services:
       - DB_USER=root
       - DB_PASSWORD=password
       - PORT=4000
+      - TASKHUB_MAIL=taskhub.inc@gmail.com
+      - TASKHUB_MAIL_PASS=vus@zbbfvk8dn6spvbjwp/#Sx742cDzFP5t!jbw!nG7
   client:
     build:
       context: ./client
