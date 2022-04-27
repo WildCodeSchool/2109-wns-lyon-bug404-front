@@ -6,7 +6,7 @@ import App from './App';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
 const client = new ApolloClient({
-  uri: 'https://taskhub.lyon1-0921.wns.wilders.dev/graphql/',
+  uri: 'https://graphql.lyon1-0921.wns.wilders.dev/',
   cache: new InMemoryCache()
 });
 
