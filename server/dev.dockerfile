@@ -1,11 +1,11 @@
 FROM node:lts-alpine
 
+RUN mkdir /app
 WORKDIR /app
-COPY package.json package.json
+COPY *.json ./
+
 RUN npm i
 COPY src src
-COPY tsconfig.json tsconfig.json
+COPY interface interface
 
-
-
-CMD ["npm", "run","start"]
+CMD npm start

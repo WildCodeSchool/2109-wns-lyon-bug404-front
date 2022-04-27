@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 services:
   # mailhog:
   #   image: mailhog/mailhog
@@ -23,20 +23,20 @@ services:
       - DB_USER=root
       - DB_PASSWORD=password
       - PORT=4000
-  # client:
-  #   build:
-  #     context: ./client
-  #     dockerfile: dev.dockerfile
-  #   container_name: 404bugs_client
-  #   ports:
-  #     - 3000:3000
-  #   volumes:
-  #     - ./client/src:/app/src
-  #     - ./client/public:/app/public
+  client:
+    build:
+      context: ./client
+      dockerfile: dev.dockerfile
+    container_name: 404bugs_client
+    ports:
+      - 3000:3000
+    volumes:
+      - ./client/src:/app/src
+      - ./client/public:/app/public
   db:
     image: mariadb
     container_name: 404bugs_db
-    volumes: ["./db:/var/lib/mysql"]
+    volumes: ['./db:/var/lib/mysql']
     ports:
       - 3308:3308
     restart: always
