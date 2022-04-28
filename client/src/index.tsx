@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import 'flowbite';
 import App from './App';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
+let appoloClientUri;
+if (window.location.origin.includes('localhost')) {
+  appoloClientUri = 'http://localhost:4000';
+} else {
+  appoloClientUri = window.location.origin.replace('taskhub', 'graphql');
+}
 const client = new ApolloClient({
-  uri: 'https://staging.graphql.lyon1-0921.wns.wilders.dev/',
+  uri: appoloClientUri,
   cache: new InMemoryCache()
 });
 
