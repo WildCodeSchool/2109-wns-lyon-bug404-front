@@ -5,16 +5,16 @@ import {
   ID,
   Mutation,
   Query,
-  Resolver,
-} from "type-graphql";
-import { getRepository } from "typeorm";
-import { ResetPasswordInput, User, UserUpdateInput } from "../models/User";
-import * as argon2 from "argon2";
-import * as jwt from "jsonwebtoken";
-import { UserRole } from "../enums/UserRole";
-import sendEmail from "../utils/sendEmail";
-import { createConfirmationUrl } from "../utils/createConfirmationUrl";
-import { EmailInterface } from "../../interface/EmailInterface";
+  Resolver
+} from 'type-graphql';
+import { getRepository } from 'typeorm';
+import { ResetPasswordInput, User, UserUpdateInput } from '../models/User';
+import * as argon2 from 'argon2';
+import * as jwt from 'jsonwebtoken';
+import { UserRole } from '../enums/UserRole';
+import sendEmail from '../utils/sendEmail';
+import { createConfirmationUrl } from '../utils/createConfirmationUrl';
+import { EmailInterface } from '../../interface/EmailInterface';
 
 @Resolver(User)
 export class UsersResolver {
@@ -37,27 +37,27 @@ export class UsersResolver {
   // sign up
   @Mutation(() => User)
   async signup(
-    @Arg("firstName") firstName: string,
-    @Arg("familyName") familyName: string,
-    @Arg("email") email: string,
-    @Arg("password") password: string
+    @Arg('firstName') firstName: string,
+    @Arg('familyName') familyName: string,
+    @Arg('email') email: string,
+    @Arg('password') password: string
   ): Promise<User | Error> {
     try {
       const newUser = this.userRepo.create({
         firstName,
         familyName,
         email,
-        password: await argon2.hash(password),
+        password: await argon2.hash(password)
       });
       newUser.assigned_tasks = [];
 
-      const validateUrl = await createConfirmationUrl(email, "confirm");
+      const validateUrl = await createConfirmationUrl(email, 'confirm');
       const emailObject: EmailInterface = {
-        from: "noreply@taskhub.com", // sender address
+        from: 'noreply@taskhub.com', // sender address
         to: email, // list of receivers
-        subject: "Confirmation compte TaskHub", // Subject line
-        text: "Veuillez cliquer sur le lien pour confirmer votre adresse email.", // plain text body
-        html: `<p>Veuillez cliquer sur le lien pour confirmer votre adresse email.</p><a href="${validateUrl}">${validateUrl}</a>`, // html body
+        subject: 'Confirmation compte TaskHub', // Subject line
+        text: 'Veuillez cliquer sur le lien pour confirmer votre adresse email.', // plain text body
+        html: `<p>Veuillez cliquer sur le lien pour confirmer votre adresse email.</p><a href="${validateUrl}">${validateUrl}</a>` // html body
       };
 
       await sendEmail(emailObject);
@@ -72,15 +72,15 @@ export class UsersResolver {
   // login
   @Mutation(() => String, { nullable: true })
   async signin(
-    @Arg("email") email: string,
-    @Arg("password") password: string
+    @Arg('email') email: string,
+    @Arg('password') password: string
   ): Promise<string> {
     const user = await this.userRepo.findOne({ email });
 
     if (user && user.confirmed) {
       if (await argon2.verify(user.password, password)) {
-        const token = jwt.sign({ userId: user.id }, "supersecret", {
-          expiresIn: "24h", // expires in 24 hours
+        const token = jwt.sign({ userId: user.id }, 'supersecret', {
+          expiresIn: '24h' // expires in 24 hours
         });
         return token;
       } else {
@@ -93,10 +93,10 @@ export class UsersResolver {
 
   // Confirm user email
   @Mutation(() => Boolean)
-  async confirmUser(@Arg("token") token: string): Promise<boolean> {
+  async confirmUser(@Arg('token') token: string): Promise<boolean> {
     try {
-      const decoded = jwt.verify(token, "supersecret", {
-        expiresIn: "24h", // expires in 24 hours
+      const decoded = jwt.verify(token, 'supersecret', {
+        expiresIn: '24h' // expires in 24 hours
       });
       await User.update({ email: decoded.email }, { confirmed: true });
       return true;
@@ -108,8 +108,8 @@ export class UsersResolver {
   // update role
   @Mutation(() => User)
   async changeUserRole(
-    @Arg("userId") id: number,
-    @Arg("role") role: UserRole
+    @Arg('userId') id: number,
+    @Arg('role') role: UserRole
   ): Promise<User | Error> {
     const user = await this.userRepo.findOne(id);
     if (role in UserRole) {
@@ -123,8 +123,8 @@ export class UsersResolver {
   // update User
   @Mutation(() => User!, { nullable: true })
   async updateUser(
-    @Arg("data", () => UserUpdateInput) updateUser: User,
-    @Arg("id", () => ID) id: number
+    @Arg('data', () => UserUpdateInput) updateUser: User,
+    @Arg('id', () => ID) id: number
   ): Promise<User | null> {
     const user = await this.userRepo.findOne(id);
     if (user) {
@@ -138,7 +138,7 @@ export class UsersResolver {
   // remove user
   @Mutation(() => User!, { nullable: true })
   async removeUser(
-    @Arg("id", () => ID) id: number
+    @Arg('id', () => ID) id: number
   ): Promise<User | null | undefined> {
     const user = await this.userRepo.findOne(id);
 
@@ -148,12 +148,12 @@ export class UsersResolver {
   // reset password
   @Mutation(() => Boolean)
   async resetUserPassword(
-    @Arg("reset", () => ResetPasswordInput) reset: ResetPasswordInput,
-    @Arg("token") token: string
+    @Arg('reset', () => ResetPasswordInput) reset: ResetPasswordInput,
+    @Arg('token') token: string
   ): Promise<boolean> {
     try {
-      const decoded = jwt.verify(token, "supersecret", {
-        expiresIn: "24h", // expires in 24 hours
+      const decoded = jwt.verify(token, 'supersecret', {
+        expiresIn: '24h' // expires in 24 hours
       });
       let newPassword = await argon2.hash(reset.password);
       await User.update({ email: decoded.email }, { password: newPassword });
@@ -165,18 +165,18 @@ export class UsersResolver {
 
   // Forgot password
   @Mutation(() => Boolean)
-  async forgotPassword(@Arg("email") email: string): Promise<boolean> {
+  async forgotPassword(@Arg('email') email: string): Promise<boolean> {
     const user = await User.findOne({ where: { email } });
     if (!user) {
       return true;
     }
-    const validateUrl = await createConfirmationUrl(email, "reset-password");
+    const validateUrl = await createConfirmationUrl(email, 'reset-password');
     const emailObject: EmailInterface = {
-      from: "noreply@taskhub.com", // sender address
+      from: 'noreply@taskhub.com', // sender address
       to: email, // list of receivers
-      subject: "Mot de pass oublier", // Subject line
-      text: "Veuillez cliquer sur le lien pour réinitialiser votre mot de passe.", // plain text body
-      html: `<a href="${validateUrl}">${validateUrl}</a>`, // html body
+      subject: 'Mot de pass oublier', // Subject line
+      text: 'Veuillez cliquer sur le lien pour réinitialiser votre mot de passe.', // plain text body
+      html: `<a href="${validateUrl}">${validateUrl}</a>` // html body
     };
     await sendEmail(emailObject);
     return true;

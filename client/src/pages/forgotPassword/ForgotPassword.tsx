@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Header from "../../components/Header";
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Header from '../../components/Header';
 
-import { useMutation } from "@apollo/client";
-import { FORGOT_PASSWORD } from "../../api/mutations/User";
-const forgotllustration = require("../../assets/forgot-password.png");
-const loingLogo = require("../../assets/loginLogo.png");
+import { useMutation } from '@apollo/client';
+import { FORGOT_PASSWORD } from '../../api/mutations/User';
+const forgotllustration = require('../../assets/forgot-password.png');
+const loingLogo = require('../../assets/loginLogo.png');
 
 export const ForgotPassword = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [email, setEmail] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [sendForgotPassword, { data, loading, error }] =
     useMutation(FORGOT_PASSWORD);
 
@@ -18,19 +18,18 @@ export const ForgotPassword = () => {
     e.preventDefault();
 
     if (!email) {
-      throw setErrorMessage("All fields are required");
+      throw setErrorMessage('All fields are required');
     }
 
     try {
       const result = await sendForgotPassword({
         variables: {
-          email,
-        },
+          email
+        }
       });
-      console.log(result);
       if (result.data.forgotPassword) {
         // success
-        navigate("/redirect");
+        navigate('/redirect');
       }
     } catch (error: any) {
       throw setErrorMessage(error.message);
