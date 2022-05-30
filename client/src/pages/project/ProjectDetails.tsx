@@ -1,31 +1,36 @@
-import { useLazyQuery, useQuery } from "@apollo/client";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { GET_ONE_PROJECT } from "../../api/queries/Project";
-import { GET_STATUS_BY_PROJECT_ID } from "../../api/queries/Status";
-import { Nav } from "../../components/Nav";
-import { ProjectBadge } from "../../components/ProjectBadge";
-import Sidebar from "../../components/Sidebar";
+import { useLazyQuery, useQuery } from '@apollo/client';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { GET_ONE_PROJECT } from '../../api/queries/Project';
+import { GET_STATUS_BY_PROJECT_ID } from '../../api/queries/Status';
+import { Nav } from '../../components/Nav';
+import { ProjectBadge } from '../../components/ProjectBadge';
+import Sidebar from '../../components/Sidebar';
+import { TaskDashboardInterface } from '../../interfaces/TaskDashboardInterface';
+import { TaskList } from '../dashboard/task/TaskList';
+import TaskBadge from './tasks/TaskBadge';
 
 export const ProjectDetails = () => {
   const { id } = useParams();
   const [project, setProject]: [any, Function] = useState([]);
   const [status, setStatus]: [any, Function] = useState([]);
-  const [projectId, setProjectId]: [string, Function] = useState("");
-  const [getProject, { loading, error, data }] = useLazyQuery(GET_ONE_PROJECT);
+  const [taskList, setTaskList]: [any, Function] = useState([]);
+  const [projectId, setProjectId]: [string, Function] = useState('');
+  const [getProject, { data }] = useLazyQuery(GET_ONE_PROJECT);
   const [getProjectStatus, { data: statusData }] = useLazyQuery(
     GET_STATUS_BY_PROJECT_ID
   );
   useEffect(() => {
     if (id !== undefined) {
       getProject({
-        variables: { projectId: Number(id) },
+        variables: { projectId: Number(id) }
       });
     }
   }, [id, getProject]);
 
   useEffect(() => {
     if (data) {
+      console.log(data.getProject);
       setProject(data.getProject);
       setProjectId(data.getProject.id);
     }
@@ -34,7 +39,7 @@ export const ProjectDetails = () => {
   useEffect(() => {
     if (projectId !== undefined) {
       getProjectStatus({
-        variables: { projectId: Number(projectId) },
+        variables: { projectId: Number(projectId) }
       });
     }
   }, [projectId, getProjectStatus]);
@@ -42,6 +47,7 @@ export const ProjectDetails = () => {
   useEffect(() => {
     if (statusData) {
       console.log(statusData.getStatusByProjectID);
+      setTaskList(statusData.getStatusByProjectID);
       // setStatus(data.getProject);
       // setProjectId(data.getProject.id);
     }
@@ -49,13 +55,13 @@ export const ProjectDetails = () => {
 
   return (
     <>
-      {project && (
+      {project && taskList.length && (
         <div className="flex flex-row w-screen">
           <div className="basis-1/5">
             <Sidebar />
           </div>
           <div className="basis-4/5 flex flex-col">
-            <Nav page={"Projects"} />
+            <Nav page={'Projects'} />
             <div className="p-8 pt-0 flex flex-col w-4/5">
               <div className="flex flex-row justify-between ">
                 <h2 className="font-bold text-secondary-100">
@@ -84,12 +90,47 @@ export const ProjectDetails = () => {
               <div className="taskSection grid grid-cols-4 gap-4">
                 <div className="bg-neutral-200 border-2 border-neutral-300  h-96 rounded-lg flex flex-col items-center">
                   <h2 className="font-medium text-neutral-700 ">To do</h2>
+                  {taskList && (
+                    <>
+                      {taskList
+                        .filter(
+                          (task: TaskDashboardInterface) =>
+                            task.name === 'To do'
+                        )[0]
+                        .tasks.map((task: TaskDashboardInterface) => (
+                          <TaskBadge task={task} />
+                        ))}
+                    </>
+                  )}
                 </div>
                 <div className="bg-neutral-200 border-2 border-neutral-300  h-96 rounded-lg flex flex-col items-center">
                   <h2 className="font-medium text-neutral-700 ">In progress</h2>
+                  {taskList && (
+                    <>
+                      {taskList
+                        .filter(
+                          (task: TaskDashboardInterface) =>
+                            task.name === 'In progress'
+                        )[0]
+                        .tasks.map((task: TaskDashboardInterface) => (
+                          <TaskBadge task={task} />
+                        ))}
+                    </>
+                  )}
                 </div>
                 <div className="bg-neutral-200 border-2 border-neutral-300  h-96 rounded-lg flex flex-col items-center">
                   <h2 className="font-medium text-neutral-700 ">Done</h2>
+                  {taskList && (
+                    <>
+                      {taskList
+                        .filter(
+                          (task: TaskDashboardInterface) => task.name === 'Done'
+                        )[0]
+                        .tasks.map((task: TaskDashboardInterface) => (
+                          <TaskBadge task={task} />
+                        ))}
+                    </>
+                  )}
                 </div>
 
                 <div className="bg-yellow-200 h-96 rounded-xl">

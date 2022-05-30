@@ -1,49 +1,45 @@
 //styles and assets
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import Header from "../../components/Header";
-import { SIGNUP } from "../../api/mutations/User";
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import Header from '../../components/Header';
+import { SIGNUP } from '../../api/mutations/User';
 // styles and assets
-import "./Signup.css";
-import { useMutation } from "@apollo/client";
-const loginIllustration = require("../../assets/signupIllustartion.png");
-const loingLogo = require("../../assets/loginLogo.png");
+import './Signup.css';
+import { useMutation } from '@apollo/client';
+import { useAuth } from '../../hooks/auth.hook';
+const loginIllustration = require('../../assets/signupIllustartion.png');
+const loingLogo = require('../../assets/loginLogo.png');
 
 export default function Signup(): JSX.Element {
+  const { signup } = useAuth();
   const navigate = useNavigate();
-  const [firstName, setFirstName] = useState("");
-  const [familyName, setFamilyName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [firstName, setFirstName] = useState('');
+  const [familyName, setFamilyName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [failed, setFailed] = useState(true);
 
-  const [doSignup, { data, loading, error }] = useMutation(SIGNUP);
+  // const [doSignup, { data, loading, error }] = useMutation(SIGNUP);
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    setErrorMessage("");
+    setErrorMessage('');
     if (!firstName || !familyName || !email || !password || !confirmPassword) {
-      throw setErrorMessage("All fields are required");
+      throw setErrorMessage('All fields are required');
     }
     if (password !== confirmPassword) {
       throw setErrorMessage("Passwords don't match");
     }
     try {
-      const result = await doSignup({
-        variables: {
-          firstName,
-          familyName,
-          email,
-          password,
-        },
-      });
-      if (result.data.signup) {
-        // success
-        localStorage.setItem("user", result.data.signin);
-        navigate("/redirect");
+      if ((await signup(email, password, firstName, familyName)) === true) {
+        navigate('/redirect');
+        return;
+      } else {
+        setFailed(true);
       }
+      //  setLoading(false);
     } catch (error: any) {
       throw setErrorMessage(error.message);
     }

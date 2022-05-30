@@ -82,12 +82,15 @@ export class UsersResolver {
         const token = jwt.sign({ userId: user.id }, 'supersecret', {
           expiresIn: '24h' // expires in 24 hours
         });
+
         return token;
       } else {
         return null;
       }
     } else {
-      return null;
+      // console.log(3);
+      // return null;
+      throw new Error('User is not confirmed');
     }
   }
 
@@ -151,14 +154,20 @@ export class UsersResolver {
     @Arg('reset', () => ResetPasswordInput) reset: ResetPasswordInput,
     @Arg('token') token: string
   ): Promise<boolean> {
+    console.log(reset.password);
     try {
       const decoded = jwt.verify(token, 'supersecret', {
         expiresIn: '24h' // expires in 24 hours
       });
       let newPassword = await argon2.hash(reset.password);
+
+      console.log(decoded);
+
       await User.update({ email: decoded.email }, { password: newPassword });
+      console.log(newPassword);
       return true;
     } catch (e) {
+      console.log(e);
       return false;
     }
   }

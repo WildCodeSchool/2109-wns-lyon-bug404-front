@@ -1,10 +1,12 @@
-import React from "react";
+import React from 'react';
 // import logo from "../assets/logoWhite.png";
-import { useNavigate } from "react-router-dom";
-import SearchInput from "./SearchInput";
-const Logo = require("../assets/logoWhite.png");
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/auth.hook';
+import SearchInput from './SearchInput';
+const Logo = require('../assets/logoWhite.png');
 
 const Sidebar = () => {
+  const { signout } = useAuth();
   const navigate = useNavigate();
   return (
     <div className="bg-gray-900 h-screen flex flex-col justify-between">
@@ -13,7 +15,7 @@ const Sidebar = () => {
         <div
           className="flex-1 min-w-0 mx-auto mt-4"
           onClick={() => {
-            navigate("/");
+            navigate('/');
           }}
         >
           <img className="h-15 w-40 " src={Logo} alt="" />
@@ -150,7 +152,14 @@ const Sidebar = () => {
           </svg>
           Settings
         </button>
-        <button type="button" className="dashboardBtn ">
+        <button
+          type="button"
+          className="dashboardBtn "
+          onClick={() => {
+            signout();
+            navigate(`/`);
+          }}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6 text-white group-hover:text-red-400 mr-2"
