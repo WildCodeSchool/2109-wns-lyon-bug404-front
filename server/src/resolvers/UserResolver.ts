@@ -51,16 +51,16 @@ export class UsersResolver {
       });
       newUser.assigned_tasks = [];
 
-      const validateUrl = await createConfirmationUrl(email, 'confirm');
-      const emailObject: EmailInterface = {
-        from: 'noreply@taskhub.com', // sender address
-        to: email, // list of receivers
-        subject: 'Confirmation compte TaskHub', // Subject line
-        text: 'Veuillez cliquer sur le lien pour confirmer votre adresse email.', // plain text body
-        html: `<p>Veuillez cliquer sur le lien pour confirmer votre adresse email.</p><a href="${validateUrl}">${validateUrl}</a>` // html body
-      };
+      // const validateUrl = await createConfirmationUrl(email, 'confirm');
+      // const emailObject: EmailInterface = {
+      //   from: 'noreply@taskhub.com', // sender address
+      //   to: email, // list of receivers
+      //   subject: 'Confirmation compte TaskHub', // Subject line
+      //   text: 'Veuillez cliquer sur le lien pour confirmer votre adresse email.', // plain text body
+      //   html: `<p>Veuillez cliquer sur le lien pour confirmer votre adresse email.</p><a href="${validateUrl}">${validateUrl}</a>` // html body
+      // };
 
-      await sendEmail(emailObject);
+      // await sendEmail(emailObject);
       await newUser.save();
 
       return newUser;
@@ -154,7 +154,6 @@ export class UsersResolver {
     @Arg('reset', () => ResetPasswordInput) reset: ResetPasswordInput,
     @Arg('token') token: string
   ): Promise<boolean> {
-    console.log(reset.password);
     try {
       const decoded = jwt.verify(token, 'supersecret', {
         expiresIn: '24h' // expires in 24 hours

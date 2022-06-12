@@ -7,20 +7,13 @@ import { ProjectList } from './ProjectList';
 
 export const ProjectSection = () => {
   const [projects, setProjects] = useState([]);
-  const {
-    loading,
-    error,
-    data,
-    refetch: refetchProjects
-  } = useQuery(GET_ALL_PROJECTS);
+  const { data, refetch: refetchProjects } = useQuery(GET_ALL_PROJECTS);
 
   useEffect(() => {
     if (data) {
       setProjects(data.getProjects);
     }
   }, [data]);
-
-  const updateProjects = () => {};
 
   return (
     <section>

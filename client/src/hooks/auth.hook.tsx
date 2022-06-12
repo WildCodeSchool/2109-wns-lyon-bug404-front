@@ -80,8 +80,6 @@ export function AuthProvider({
   const { data: getProfile, refetch } = useQuery(GET_PROFILE);
 
   useEffect(() => {
-    // console.log('Connection status changed: ', !!getProfile);
-    // console.log('User data is: ', getProfile?.getProfile);
     if (getProfile) {
       setIsConnected(true);
     } else {
@@ -89,7 +87,6 @@ export function AuthProvider({
     }
   }, [getProfile]);
 
-  // should add signin, signup and signout here
   const signin = async (email: string, password: string): Promise<boolean> => {
     try {
       const result = await doSignin({
@@ -118,7 +115,9 @@ export function AuthProvider({
     firstName: string,
     familyName: string
   ): Promise<boolean> => {
+    console.log(1);
     try {
+      console.log(2);
       await doSignUp({
         variables: {
           firstName,
@@ -127,8 +126,10 @@ export function AuthProvider({
           password
         }
       });
+      console.log(3);
       return true;
     } catch {
+      console.log(4);
       return false;
     }
   };
