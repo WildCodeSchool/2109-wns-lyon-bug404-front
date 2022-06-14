@@ -21,7 +21,7 @@ export const Projects = () => {
       </div>
       <div className="basis-4/5 flex flex-col">
         <Nav page={'Projects'} />
-        <div className="p-8 bg-slate-400 ">
+        <div className="p-8 bg-slate-200 ">
           {projects.length > 0 && (
             <ul className="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
               {projects.map((project: ProjectInterfaceList) => (
