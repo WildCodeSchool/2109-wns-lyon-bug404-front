@@ -39,10 +39,19 @@ export async function bootstrap() {
 
   const server = new ApolloServer({
     schema,
-    context: ({ req }) => {
+    context: ({ req, res }) => {
+      const authorization = req.headers['authorization'];
+      let token = null;
+      if (authorization && authorization?.startsWith('Bearer ')) {
+        token = authorization.replace('Bearer ', '');
+      } else {
+        token = authorization;
+      }
+
       return {
-        token: req.headers.authorization,
-        user: null
+        token,
+        user: null,
+        res
       };
     }
   });

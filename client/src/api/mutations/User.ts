@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 // SignIn
 export const SIGNIN = gql`
@@ -48,9 +48,3 @@ export const RESET_PASSWORD = gql`
     resetUserPassword(token: $token, reset: $reset)
   }
 `;
-
-// export const GET_PROFILE = gql`|
-//   mutation GetProfile() {
-//     getProfile()
-//   }
-// `

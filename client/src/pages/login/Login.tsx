@@ -1,44 +1,37 @@
-import { useMutation } from "@apollo/client";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { SIGNIN } from "../../api/mutations/User";
+import { useMutation } from '@apollo/client';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { SIGNIN } from '../../api/mutations/User';
 //components
-import Header from "../../components/Header";
+import Header from '../../components/Header';
+import { useAuth } from '../../hooks/auth.hook';
 //styles and assets
-import "./Login.css";
-const loginIllustration = require("../../assets/loginIllustration.png");
-const loingLogo = require("../../assets/loginLogo.png");
+import './Login.css';
+const loginIllustration = require('../../assets/loginIllustration.png');
+const loingLogo = require('../../assets/loginLogo.png');
 
 export default function Login(): JSX.Element {
+  const { signin } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [doSignin, { data, loading, error }] = useMutation(SIGNIN);
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setFailed(false);
-    const result = await doSignin({
-      variables: {
-        email: email,
-        password: password,
-      },
-    });
-    if (result.data.signin) {
-      // success
-      localStorage.setItem("token", result.data.signin);
-      navigate("/dashboard");
+    setLoading(true);
+    if ((await signin(email, password)) === true) {
+      navigate('/dashboard');
+      return;
     } else {
-      // failed
       setFailed(true);
     }
+    setLoading(false);
   };
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
   return (
     <div className="login-page h-screen ">
       <Header />
@@ -79,9 +72,9 @@ export default function Login(): JSX.Element {
                 className="form-input"
               />
             </label>
-            {error && (
+            {failed && (
               <p className="text-sm font-medium text-red-500">
-                {error.message}
+                Something went wrong, please retry again
               </p>
             )}
 

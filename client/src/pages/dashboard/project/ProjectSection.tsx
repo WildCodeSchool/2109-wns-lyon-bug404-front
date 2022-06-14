@@ -1,9 +1,20 @@
-import React from "react";
-import Create from "./create/Create";
+import { useQuery } from '@apollo/client';
+import { useEffect, useState } from 'react';
+import { GET_ALL_PROJECTS } from '../../../api/queries/Project';
+import Create from './create/Create';
 
-import { ProjectList } from "./ProjectList";
+import { ProjectList } from './ProjectList';
 
 export const ProjectSection = () => {
+  const [projects, setProjects] = useState([]);
+  const { data, refetch: refetchProjects } = useQuery(GET_ALL_PROJECTS);
+
+  useEffect(() => {
+    if (data) {
+      setProjects(data.getProjects);
+    }
+  }, [data]);
+
   return (
     <section>
       <header className="bg-white space-y-4 p-4 sm:px-8 sm:py-6 lg:p-4 xl:px-8 xl:py-6">
@@ -25,11 +36,11 @@ export const ProjectSection = () => {
             </svg>
             <h2 className="font-bold text-secondary-100 mt-1">Projects</h2>
           </div>
-          <Create />
+          <Create refetchProjects={refetchProjects} />
         </div>
       </header>
 
-      <ProjectList />
+      <ProjectList projects={projects} />
       <div className="link">
         <a href="/projects">See all projects</a>
       </div>

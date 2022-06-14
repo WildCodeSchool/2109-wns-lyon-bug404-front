@@ -1,10 +1,10 @@
-import { Resolver, Query, Mutation, Arg, ID } from "type-graphql";
-import { Project, ProjectInput, ProjectUpdateInput } from "../models/Project";
-import { getRepository, Repository } from "typeorm";
-import { User } from "../models/User";
-import { ProjectStates } from "../enums/ProjectStates";
-import { Status, StatusInput } from "../models/Status";
-import { defaultStatus } from "../utils/defaultStatus";
+import { Resolver, Query, Mutation, Arg, ID } from 'type-graphql';
+import { Project, ProjectInput, ProjectUpdateInput } from '../models/Project';
+import { getRepository, Repository } from 'typeorm';
+import { User } from '../models/User';
+import { ProjectStates } from '../enums/ProjectStates';
+import { Status, StatusInput } from '../models/Status';
+import { defaultStatus } from '../utils/defaultStatus';
 
 @Resolver()
 export class ProjectResolver {
@@ -16,25 +16,25 @@ export class ProjectResolver {
   @Query(() => [Project])
   async getProjects(): Promise<Project[]> {
     return await this.projectRepository.find({
-      relations: ["assigned_users", "created_by"],
+      relations: ['assigned_users', 'created_by']
     });
   }
 
   //  Find one product
   @Query(() => Project!, { nullable: true })
   async getProject(
-    @Arg("projectID") projectID: number
+    @Arg('projectID') projectID: number
   ): Promise<Project | undefined | null> {
     return await this.projectRepository.findOne(projectID, {
-      relations: ["assigned_users", "created_by"],
+      relations: ['assigned_users', 'created_by']
     });
   }
 
   // add one project
   @Mutation(() => Project!)
   async createProject(
-    @Arg("userID", () => ID) id: number,
-    @Arg("project", () => ProjectInput) newProjectData: ProjectInput
+    @Arg('userID', () => ID) id: number,
+    @Arg('project', () => ProjectInput) newProjectData: ProjectInput
   ): Promise<Project> {
     const project = this.projectRepository.create(newProjectData);
     const user = await this.userRepository.findOne(id);
@@ -49,7 +49,7 @@ export class ProjectResolver {
   //  delete a project
   @Mutation(() => Project!, { nullable: true })
   async deleteProject(
-    @Arg("projectID") projectID: string
+    @Arg('projectID') projectID: string
   ): Promise<Project | undefined | null> {
     const allProjects = await this.projectRepository;
     const project = await allProjects.findOne(projectID);
@@ -62,8 +62,8 @@ export class ProjectResolver {
 
   // Update a project
   @Mutation(() => Project!) async updateProject(
-    @Arg("project", () => ProjectUpdateInput) newProjectData: Project,
-    @Arg("projectID") projectID: number
+    @Arg('project', () => ProjectUpdateInput) newProjectData: Project,
+    @Arg('projectID') projectID: number
   ): Promise<Project | null> {
     let project = await Project.findOne(projectID);
     if (project) {
@@ -76,12 +76,12 @@ export class ProjectResolver {
 
   // assign memeber to project
   @Mutation(() => Project!) async assignProjectToUser(
-    @Arg("projectID") projectID: number,
-    @Arg("userID") userID: number
+    @Arg('projectID') projectID: number,
+    @Arg('userID') userID: number
   ): Promise<Project | null> {
     let user = await this.userRepository.findOne(userID);
     let project = await this.projectRepository.findOne(projectID, {
-      relations: ["assigned_users"],
+      relations: ['assigned_users']
     });
 
     project.assigned_users.push(user);
@@ -95,11 +95,11 @@ export class ProjectResolver {
 
   // unassign memeber from project
   @Mutation(() => Project!) async unassignUserFromProject(
-    @Arg("projectID") projectID: number,
-    @Arg("userID") userID: number
+    @Arg('projectID') projectID: number,
+    @Arg('userID') userID: number
   ): Promise<Project | null> {
     let project = await this.projectRepository.findOne(projectID, {
-      relations: ["assigned_users"],
+      relations: ['assigned_users']
     });
 
     if (project) {
@@ -115,8 +115,8 @@ export class ProjectResolver {
   // update project status
   @Mutation(() => Project)
   async changeProjectStates(
-    @Arg("projectID") id: number,
-    @Arg("state") state: ProjectStates
+    @Arg('projectID') id: number,
+    @Arg('state') state: ProjectStates
   ): Promise<Project | Error> {
     const project = await this.projectRepository.findOne(id);
     if (ProjectStates[state]) {
@@ -129,10 +129,10 @@ export class ProjectResolver {
 
   // initiate status to a new project
   @Mutation(() => Project!) async initiateProjectStatus(
-    @Arg("projectID") projectID: number
+    @Arg('projectID') projectID: number
   ): Promise<Project | null> {
     const project = await this.projectRepository.findOne(projectID, {
-      relations: ["taskStatus"],
+      relations: ['taskStatus']
     });
 
     for (const item of defaultStatus) {

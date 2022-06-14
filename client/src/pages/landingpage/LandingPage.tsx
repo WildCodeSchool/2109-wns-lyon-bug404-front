@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 //components
-import Header from "../../components/Header";
+import Header from '../../components/Header';
 
 //styles and images
-import "./LandingPage.css";
-const bgImage = require("../../assets/bgImage.png");
+import './LandingPage.css';
+const bgImage = require('../../assets/bgImage.png');
 
 export default function LandingPage(): JSX.Element {
   return (

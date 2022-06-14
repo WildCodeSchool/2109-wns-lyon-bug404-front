@@ -1,7 +1,4 @@
-import { useQuery } from "@apollo/client";
-import { useEffect, useState } from "react";
-import { GET_ALL_PROJECTS } from "../../../api/queries/Project";
-import { ProjectCard } from "./ProjectCard";
+import { ProjectCard } from './ProjectCard';
 
 interface ProjectInterface {
   id: number;
@@ -13,21 +10,21 @@ interface ProjectInterface {
     familyName: string;
   };
 }
-export const ProjectList = (): JSX.Element => {
-  const [projects, setProjects] = useState([]);
-  const { loading, error, data } = useQuery(GET_ALL_PROJECTS);
-
-  useEffect(() => {
-    if (data) setProjects(data.getProjects);
-  }, [data]);
-
+export const ProjectList = ({
+  projects
+}: {
+  projects: ProjectInterface[];
+}): JSX.Element => {
   return (
     <div className=" grid grid-cols-5 gap-0  px-8 cursor-pointer">
       {projects && (
         <>
-          {projects.slice(0, 4).map((project: ProjectInterface) => (
-            <ProjectCard project={project} key={project.id} />
-          ))}
+          {projects
+            .slice(projects.length - 4, projects.length)
+            .reverse()
+            .map((project: ProjectInterface) => (
+              <ProjectCard project={project} key={project.id} />
+            ))}
         </>
       )}
       <div className="">
