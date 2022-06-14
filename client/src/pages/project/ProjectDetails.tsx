@@ -1,4 +1,4 @@
-import { useLazyQuery, useQuery } from '@apollo/client';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { GET_ONE_PROJECT } from '../../api/queries/Project';
@@ -9,6 +9,37 @@ import Sidebar from '../../components/Sidebar';
 import { TaskDashboardInterface } from '../../interfaces/TaskDashboardInterface';
 import { TaskList } from '../dashboard/task/TaskList';
 import TaskBadge from './tasks/TaskBadge';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { ProjectIColumnInterface } from '../../interfaces/ProjectColumnInterface';
+import { DELETE_TASK } from '../../api/mutations/Task';
+
+const columnsFromBackend = {
+  0: {
+    name: 'To do',
+    items: [
+      {
+        assigned_to: null,
+        due_date: '2022-07-23T00:00:00.000Z',
+        id: '14',
+        title: 'Get coffee'
+      },
+      {
+        assigned_to: null,
+        due_date: '2022-07-23T00:00:00.000Z',
+        id: '13',
+        title: 'Sleep'
+      }
+    ]
+  },
+  1: {
+    name: 'In Progress',
+    items: []
+  },
+  2: {
+    name: 'Done',
+    items: []
+  }
+};
 
 export const ProjectDetails = () => {
   const { id } = useParams();
@@ -16,10 +47,21 @@ export const ProjectDetails = () => {
   const [status, setStatus]: [any, Function] = useState([]);
   const [taskList, setTaskList]: [any, Function] = useState([]);
   const [projectId, setProjectId]: [string, Function] = useState('');
-  const [getProject, { data }] = useLazyQuery(GET_ONE_PROJECT);
-  const [getProjectStatus, { data: statusData }] = useLazyQuery(
-    GET_STATUS_BY_PROJECT_ID
-  );
+  const [getProject, { data, refetch: refetchProject }] =
+    useLazyQuery(GET_ONE_PROJECT);
+
+  const [getProjectStatus, { data: statusData, refetch: refetchStatus }] =
+    useLazyQuery(GET_STATUS_BY_PROJECT_ID);
+  const [doDeleteTask, { data: deletedTaskData }] = useMutation(DELETE_TASK);
+  const [columns, setColumns] = useState<any[]>([]);
+
+  const deleteTask = async (id: any) => {
+    await doDeleteTask({
+      variables: { taskId: id }
+    });
+    await refetchStatus();
+  };
+
   useEffect(() => {
     if (id !== undefined) {
       getProject({
@@ -45,11 +87,61 @@ export const ProjectDetails = () => {
 
   useEffect(() => {
     if (statusData) {
+      setColumns(statusData.getStatusByProjectID);
       setTaskList(statusData.getStatusByProjectID);
     } else {
       setTaskList([]);
     }
   }, [statusData]);
+
+  const onDragEnd = (
+    result: any,
+    columns: ProjectIColumnInterface[],
+    setColumns: any
+  ) => {
+    if (!result.destination) return;
+    const { source, destination } = result;
+    if (destination.droppableId === '3') {
+      const sourceColumn = columns[source.droppableId];
+      const sourceItems = [...sourceColumn.tasks];
+      const [removed] = sourceItems.splice(source.index, 1);
+      console.log(removed);
+      deleteTask(removed.id);
+    } else {
+      if (source.droppableId !== destination.droppableId) {
+        const sourceColumn = columns[source.droppableId];
+        const destColumn = columns[destination.droppableId];
+        const sourceItems = [...sourceColumn.tasks];
+        const destItems = [...destColumn.tasks];
+        const [removed] = sourceItems.splice(source.index, 1);
+
+        destItems.splice(destination.index, 0, removed);
+        setColumns({
+          ...columns,
+          [source.droppableId]: {
+            ...sourceColumn,
+            tasks: sourceItems
+          },
+          [destination.droppableId]: {
+            ...destColumn,
+            tasks: destItems
+          }
+        });
+      } else {
+        const column = columns[source.droppableId];
+        const copiedItems = [...column.tasks];
+        const [removed] = copiedItems.splice(source.index, 1);
+        copiedItems.splice(destination.index, 0, removed);
+        setColumns({
+          ...columns,
+          [source.droppableId]: {
+            ...column,
+            tasks: copiedItems
+          }
+        });
+      }
+    }
+  };
 
   return (
     <>
@@ -87,40 +179,131 @@ export const ProjectDetails = () => {
               </div>
               {taskList.length > 0 ? (
                 <>
-                  <div className="taskSection grid grid-cols-4 gap-4">
-                    <div className="bg-neutral-200 border-2 border-neutral-300  h-96 rounded-lg flex flex-col items-center">
-                      <h2 className="font-medium text-neutral-700 ">To do</h2>
-                      {taskList && (
-                        <>
-                          {taskList
-                            .filter(
-                              (task: TaskDashboardInterface) =>
-                                task.name === 'To do'
-                            )[0]
-                            .tasks.map((task: TaskDashboardInterface) => (
-                              <TaskBadge task={task} />
-                            ))}
-                        </>
+                  <div className="taskSection grid grid-cols-4 gap-4 ">
+                    <DragDropContext
+                      onDragEnd={(result) =>
+                        onDragEnd(result, columns, setColumns)
+                      }
+                    >
+                      {Object.entries(columns).map(
+                        ([columnId, column], index) => {
+                          return (
+                            <div
+                              style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center'
+                              }}
+                              key={columnId}
+                            >
+                              <h2>{column.name}</h2>
+                              <div>
+                                <Droppable
+                                  droppableId={columnId}
+                                  key={columnId}
+                                >
+                                  {(provided, snapshot) => {
+                                    return (
+                                      <div
+                                        className="bg-neutral-200 border-2 border-neutral-300  h-96 rounded-lg flex flex-col items-center"
+                                        {...provided.droppableProps}
+                                        ref={provided.innerRef}
+                                        style={{
+                                          background: snapshot.isDraggingOver
+                                            ? 'lightblue'
+                                            : 'lightgrey',
+                                          padding: 4,
+                                          width: 200,
+                                          minHeight: 450
+                                        }}
+                                      >
+                                        {column.tasks.map(
+                                          (item: any, index: any) => {
+                                            return (
+                                              <Draggable
+                                                key={item.id}
+                                                draggableId={item.id}
+                                                index={index}
+                                              >
+                                                {(provided, snapshot) => {
+                                                  return (
+                                                    <div
+                                                      className="flex flex-row justify-start   w-full m-1 hover:bg-red-200 cursor-pointer hover:bg-opacity-70 p-1"
+                                                      ref={provided.innerRef}
+                                                      {...provided.draggableProps}
+                                                      {...provided.dragHandleProps}
+                                                      style={{
+                                                        userSelect: 'none',
+                                                        borderRadius: '8px',
+                                                        // padding: 16,
+                                                        // margin: '0 0 8px 0',
+                                                        // minHeight: '50px',
+                                                        backgroundColor:
+                                                          snapshot.isDragging
+                                                            ? '#263B4A'
+                                                            : '#456C86',
+                                                        color: 'white',
+                                                        ...provided
+                                                          .draggableProps.style
+                                                      }}
+                                                    >
+                                                      {item.title}
+                                                    </div>
+                                                  );
+                                                }}
+                                              </Draggable>
+                                            );
+                                          }
+                                        )}
+                                        {provided.placeholder}
+                                      </div>
+                                    );
+                                  }}
+                                </Droppable>
+                              </div>
+                            </div>
+                          );
+                        }
                       )}
-                    </div>
-                    <div className="bg-neutral-200 border-2 border-neutral-300  h-96 rounded-lg flex flex-col items-center">
-                      <h2 className="font-medium text-neutral-700 ">
-                        In progress
-                      </h2>
-                      {taskList && (
-                        <>
-                          {taskList
-                            .filter(
-                              (task: TaskDashboardInterface) =>
-                                task.name === 'In progress'
-                            )[0]
-                            .tasks.map((task: TaskDashboardInterface) => (
-                              <TaskBadge task={task} />
-                            ))}
-                        </>
-                      )}
-                    </div>
-                    <div className="bg-neutral-200 border-2 border-neutral-300  h-96 rounded-lg flex flex-col items-center">
+                      <Droppable droppableId={'3'}>
+                        {(provided, snapshot) => {
+                          return (
+                            <div
+                              className=" border-2   h-96 rounded-lg flex flex-col "
+                              {...provided.droppableProps}
+                              ref={provided.innerRef}
+                              style={{
+                                background: snapshot.isDraggingOver
+                                  ? '#FFEBEE'
+                                  : 'white',
+                                padding: 4,
+                                width: 50,
+                                height: 50
+                              }}
+                            >
+                              <div>
+                                <svg
+                                  className="w-10 h-10"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="1.5"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                  ></path>
+                                </svg>
+                              </div>
+                              {provided.placeholder}
+                            </div>
+                          );
+                        }}
+                      </Droppable>
+                    </DragDropContext>
+                    {/* <div className="bg-neutral-200 border-2 border-neutral-300  h-96 rounded-lg flex flex-col items-center">
                       <h2 className="font-medium text-neutral-700 ">Done</h2>
                       {taskList && (
                         <>
@@ -134,27 +317,27 @@ export const ProjectDetails = () => {
                             ))}
                         </>
                       )}
-                    </div>
+                    </div> */}
 
-                    <div className="bg-yellow-200 h-96 rounded-xl">
-                      {/* <a
+                    {/* <div className="bg-yellow-200 h-96 rounded-xl">
+                      <a
                         href="/new"
                         className=" bg-neutral-100 h-96 rounded-xl hover:border-primary hover:border-solid hover:bg-white hover:text-primary group  flex flex-col items-center justify-center border-2 border-dashed border-slate-300 text-sm leading-6 text-slate-900 font-medium py-3"
-                      > */}
-                      <div className=" bg-neutral-100 h-96 rounded-xl hover:border-primary hover:border-solid hover:bg-white hover:text-primary group  flex flex-col items-center justify-center border-2 border-dashed border-slate-300 text-sm leading-6 text-slate-900 font-medium py-3">
-                        <svg
-                          className="group-hover:text-primary mb-1 text-slate-400"
-                          width="20"
-                          height="20"
-                          fill="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path d="M10 5a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-3v3a1 1 0 1 1-2 0v-3H6a1 1 0 1 1 0-2h3V6a1 1 0 0 1 1-1Z" />
-                        </svg>
-                        New section
-                      </div>
-                      {/* </a> */}
-                    </div>
+                      >
+                        <div className=" bg-neutral-100 h-96 rounded-xl hover:border-primary hover:border-solid hover:bg-white hover:text-primary group  flex flex-col items-center justify-center border-2 border-dashed border-slate-300 text-sm leading-6 text-slate-900 font-medium py-3">
+                          <svg
+                            className="group-hover:text-primary mb-1 text-slate-400"
+                            width="20"
+                            height="20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path d="M10 5a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-3v3a1 1 0 1 1-2 0v-3H6a1 1 0 1 1 0-2h3V6a1 1 0 0 1 1-1Z" />
+                          </svg>
+                          New section
+                        </div>
+                      </a>
+                    </div> */}
                   </div>
                 </>
               ) : (
