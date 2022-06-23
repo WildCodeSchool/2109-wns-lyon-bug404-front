@@ -11,7 +11,8 @@ import { TaskList } from '../dashboard/task/TaskList';
 import TaskBadge from './tasks/TaskBadge';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { ProjectIColumnInterface } from '../../interfaces/ProjectColumnInterface';
-import { DELETE_TASK } from '../../api/mutations/Task';
+import { DELETE_TASK, UPDATE_TASK_STATUS } from '../../api/mutations/Task';
+import DueDate from './layout/DueDate';
 
 const columnsFromBackend = {
   0: {
@@ -44,20 +45,30 @@ const columnsFromBackend = {
 export const ProjectDetails = () => {
   const { id } = useParams();
   const [project, setProject]: [any, Function] = useState([]);
-  const [status, setStatus]: [any, Function] = useState([]);
   const [taskList, setTaskList]: [any, Function] = useState([]);
   const [projectId, setProjectId]: [string, Function] = useState('');
   const [getProject, { data, refetch: refetchProject }] =
     useLazyQuery(GET_ONE_PROJECT);
-
   const [getProjectStatus, { data: statusData, refetch: refetchStatus }] =
     useLazyQuery(GET_STATUS_BY_PROJECT_ID);
-  const [doDeleteTask, { data: deletedTaskData }] = useMutation(DELETE_TASK);
+  const [doDeleteTask] = useMutation(DELETE_TASK);
+  const [doUpdateTask] = useMutation(UPDATE_TASK_STATUS);
   const [columns, setColumns] = useState<any[]>([]);
 
   const deleteTask = async (id: any) => {
     await doDeleteTask({
       variables: { taskId: id }
+    });
+    await refetchStatus();
+  };
+
+  const updateTaskStatus = async (taskId: string, status: string) => {
+    await doUpdateTask({
+      variables: {
+        statusName: status,
+        taskId: Number(taskId),
+        projectId: Number(projectId)
+      }
     });
     await refetchStatus();
   };
@@ -72,6 +83,7 @@ export const ProjectDetails = () => {
 
   useEffect(() => {
     if (data) {
+      console.log(new Date(data.getProject.end_date));
       setProject(data.getProject);
       setProjectId(data.getProject.id);
     }
@@ -105,7 +117,6 @@ export const ProjectDetails = () => {
       const sourceColumn = columns[source.droppableId];
       const sourceItems = [...sourceColumn.tasks];
       const [removed] = sourceItems.splice(source.index, 1);
-      console.log(removed);
       deleteTask(removed.id);
     } else {
       if (source.droppableId !== destination.droppableId) {
@@ -113,9 +124,11 @@ export const ProjectDetails = () => {
         const destColumn = columns[destination.droppableId];
         const sourceItems = [...sourceColumn.tasks];
         const destItems = [...destColumn.tasks];
+
         const [removed] = sourceItems.splice(source.index, 1);
 
         destItems.splice(destination.index, 0, removed);
+        updateTaskStatus(removed.id, destColumn.name);
         setColumns({
           ...columns,
           [source.droppableId]: {
@@ -127,19 +140,20 @@ export const ProjectDetails = () => {
             tasks: destItems
           }
         });
-      } else {
-        const column = columns[source.droppableId];
-        const copiedItems = [...column.tasks];
-        const [removed] = copiedItems.splice(source.index, 1);
-        copiedItems.splice(destination.index, 0, removed);
-        setColumns({
-          ...columns,
-          [source.droppableId]: {
-            ...column,
-            tasks: copiedItems
-          }
-        });
       }
+      // else {
+      //   const column = columns[source.droppableId];
+      //   const copiedItems = [...column.tasks];
+      //   const [removed] = copiedItems.splice(source.index, 1);
+      //   copiedItems.splice(destination.index, 0, removed);
+      //   setColumns({
+      //     ...columns,
+      //     [source.droppableId]: {
+      //       ...column,
+      //       tasks: copiedItems
+      //     }
+      //   });
+      // }
     }
   };
 
@@ -157,6 +171,7 @@ export const ProjectDetails = () => {
                 <h2 className="font-bold text-secondary-100">
                   {project.title}
                 </h2>
+                {/* <DueDate date={project.end_date} /> */}
                 <ProjectBadge state={project.state} />
               </div>
               <p className="text-sm mt-1">{project.description}</p>
@@ -234,10 +249,9 @@ export const ProjectDetails = () => {
                                                       {...provided.dragHandleProps}
                                                       style={{
                                                         userSelect: 'none',
+                                                        fontSize: '14px',
                                                         borderRadius: '8px',
-                                                        // padding: 16,
-                                                        // margin: '0 0 8px 0',
-                                                        // minHeight: '50px',
+                                                        fontWeight: 'normal',
                                                         backgroundColor:
                                                           snapshot.isDragging
                                                             ? '#263B4A'
@@ -303,41 +317,6 @@ export const ProjectDetails = () => {
                         }}
                       </Droppable>
                     </DragDropContext>
-                    {/* <div className="bg-neutral-200 border-2 border-neutral-300  h-96 rounded-lg flex flex-col items-center">
-                      <h2 className="font-medium text-neutral-700 ">Done</h2>
-                      {taskList && (
-                        <>
-                          {taskList
-                            .filter(
-                              (task: TaskDashboardInterface) =>
-                                task.name === 'Done'
-                            )[0]
-                            .tasks.map((task: TaskDashboardInterface) => (
-                              <TaskBadge task={task} />
-                            ))}
-                        </>
-                      )}
-                    </div> */}
-
-                    {/* <div className="bg-yellow-200 h-96 rounded-xl">
-                      <a
-                        href="/new"
-                        className=" bg-neutral-100 h-96 rounded-xl hover:border-primary hover:border-solid hover:bg-white hover:text-primary group  flex flex-col items-center justify-center border-2 border-dashed border-slate-300 text-sm leading-6 text-slate-900 font-medium py-3"
-                      >
-                        <div className=" bg-neutral-100 h-96 rounded-xl hover:border-primary hover:border-solid hover:bg-white hover:text-primary group  flex flex-col items-center justify-center border-2 border-dashed border-slate-300 text-sm leading-6 text-slate-900 font-medium py-3">
-                          <svg
-                            className="group-hover:text-primary mb-1 text-slate-400"
-                            width="20"
-                            height="20"
-                            fill="currentColor"
-                            aria-hidden="true"
-                          >
-                            <path d="M10 5a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-3v3a1 1 0 1 1-2 0v-3H6a1 1 0 1 1 0-2h3V6a1 1 0 0 1 1-1Z" />
-                          </svg>
-                          New section
-                        </div>
-                      </a>
-                    </div> */}
                   </div>
                 </>
               ) : (
