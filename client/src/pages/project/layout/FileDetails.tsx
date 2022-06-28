@@ -25,7 +25,7 @@ const FileDetails = ({ file }: { file: FileInterface }) => {
     >
       {/* icon */}
       <div>
-        <img alt="hi" src={imageImg} className="h-10 w-10" />
+        <img alt="hi" src={imageImg} className="h-9 w-9" />
       </div>
       {/* content */}
       <div className="text-sm">{file.filename}</div>

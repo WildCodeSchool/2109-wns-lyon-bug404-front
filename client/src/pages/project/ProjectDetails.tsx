@@ -13,6 +13,7 @@ import DueDate from './layout/DueDate';
 import UploadFile from './layout/UploadFile';
 import TaskHeader from './layout/TaskHeader';
 import FilesList from './layout/FilesList';
+import TeamOnProject from './layout/TeamOnProject';
 
 export const ProjectDetails = () => {
   const { id } = useParams();
@@ -307,6 +308,7 @@ export const ProjectDetails = () => {
                 {/* right section */}
                 <div className="ml-4">
                   <FilesList files={project.files} />
+                  <TeamOnProject />
                 </div>
               </div>
             </div>
