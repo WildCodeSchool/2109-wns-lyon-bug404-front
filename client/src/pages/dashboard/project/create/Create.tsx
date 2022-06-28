@@ -33,7 +33,6 @@ const Create = ({ refetchProjects }: { refetchProjects: Function }) => {
           project: {
             title: title,
             description: description,
-            image_url: 'url super url',
             start_date: startDate,
             end_date: endDate
           },

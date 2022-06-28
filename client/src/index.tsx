@@ -10,10 +10,13 @@ import {
   InMemoryCache
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+import { createUploadLink } from 'apollo-upload-client';
 
 let appoloClientUri;
 if (window.location.origin.includes('localhost')) {
   appoloClientUri = 'http://localhost:4001';
+  // connect the GraphQL API
+  const link = createUploadLink({ uri: appoloClientUri });
 } else {
   appoloClientUri = window.location.origin.replace('taskhub', 'graphql');
 }
@@ -21,6 +24,9 @@ if (window.location.origin.includes('localhost')) {
 const httpLink = createHttpLink({
   uri: appoloClientUri
 });
+
+// connect the GraphQL API
+const link = createUploadLink({ uri: 'http://localhost:4001/graphql' });
 
 // fetch token from localstorage and set it in headers
 const authLink = setContext((_, { headers }) => {
@@ -36,7 +42,8 @@ const authLink = setContext((_, { headers }) => {
 const client = new ApolloClient({
   // uri: appoloClientUri,
   // cache: new InMemoryCache()
-  link: authLink.concat(httpLink), //adds token befor each request
+  // link: authLink.concat(httpLink), //adds token befor each request
+  link: authLink.concat(link),
   cache: new InMemoryCache()
 });
 

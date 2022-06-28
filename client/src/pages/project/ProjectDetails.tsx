@@ -6,41 +6,13 @@ import { GET_STATUS_BY_PROJECT_ID } from '../../api/queries/Status';
 import { Nav } from '../../components/Nav';
 import { ProjectBadge } from '../../components/ProjectBadge';
 import Sidebar from '../../components/Sidebar';
-import { TaskDashboardInterface } from '../../interfaces/TaskDashboardInterface';
-import { TaskList } from '../dashboard/task/TaskList';
-import TaskBadge from './tasks/TaskBadge';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { ProjectIColumnInterface } from '../../interfaces/ProjectColumnInterface';
 import { DELETE_TASK, UPDATE_TASK_STATUS } from '../../api/mutations/Task';
 import DueDate from './layout/DueDate';
-
-const columnsFromBackend = {
-  0: {
-    name: 'To do',
-    items: [
-      {
-        assigned_to: null,
-        due_date: '2022-07-23T00:00:00.000Z',
-        id: '14',
-        title: 'Get coffee'
-      },
-      {
-        assigned_to: null,
-        due_date: '2022-07-23T00:00:00.000Z',
-        id: '13',
-        title: 'Sleep'
-      }
-    ]
-  },
-  1: {
-    name: 'In Progress',
-    items: []
-  },
-  2: {
-    name: 'Done',
-    items: []
-  }
-};
+import UploadFile from './layout/UploadFile';
+import TaskHeader from './layout/TaskHeader';
+import FilesList from './layout/FilesList';
 
 export const ProjectDetails = () => {
   const { id } = useParams();
@@ -83,7 +55,6 @@ export const ProjectDetails = () => {
 
   useEffect(() => {
     if (data) {
-      console.log(new Date(data.getProject.end_date));
       setProject(data.getProject);
       setProjectId(data.getProject.id);
     }
@@ -164,9 +135,9 @@ export const ProjectDetails = () => {
           <div className="basis-1/5">
             <Sidebar />
           </div>
-          <div className="basis-4/5 flex flex-col">
+          <div className="basis-4/5 flex flex-col ">
             <Nav page={'Projects'} />
-            <div className="p-8 pt-0 flex flex-col w-4/5">
+            <div className="p-8 pt-0 flex flex-col ">
               <div className="flex flex-row justify-between ">
                 <h2 className="font-bold text-secondary-100">
                   {project.title}
@@ -175,170 +146,169 @@ export const ProjectDetails = () => {
                 <ProjectBadge state={project.state} />
               </div>
               <p className="text-sm mt-1">{project.description}</p>
-              <div className="flex flex-row justify-start items-center my-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 stroke-primary"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
-                  />
-                </svg>
-                <h2 className="font-medium text-primary mt-1">Tasks</h2>
-              </div>
-              {taskList.length > 0 ? (
-                <>
-                  <div className="taskSection grid grid-cols-4 gap-4 ">
-                    <DragDropContext
-                      onDragEnd={(result) =>
-                        onDragEnd(result, columns, setColumns)
-                      }
-                    >
-                      {Object.entries(columns).map(
-                        ([columnId, column], index) => {
-                          return (
-                            <div
-                              style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center'
-                              }}
-                              key={columnId}
-                            >
-                              <h2>{column.name}</h2>
-                              <div>
-                                <Droppable
-                                  droppableId={columnId}
+              <UploadFile projectId={parseInt(projectId)} />
+              <div className="flex flex-row">
+                {/* left section */}
+                <div className="w-8/12">
+                  <TaskHeader />
+                  {taskList.length > 0 ? (
+                    <>
+                      <div className="taskSection flex justify-between ">
+                        <DragDropContext
+                          onDragEnd={(result) =>
+                            onDragEnd(result, columns, setColumns)
+                          }
+                        >
+                          {Object.entries(columns).map(
+                            ([columnId, column], index) => {
+                              return (
+                                <div
+                                  style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center'
+                                  }}
                                   key={columnId}
                                 >
-                                  {(provided, snapshot) => {
-                                    return (
-                                      <div
-                                        className="bg-neutral-200 border-2 border-neutral-300  h-96 rounded-lg flex flex-col items-center"
-                                        {...provided.droppableProps}
-                                        ref={provided.innerRef}
-                                        style={{
-                                          background: snapshot.isDraggingOver
-                                            ? 'lightblue'
-                                            : 'lightgrey',
-                                          padding: 4,
-                                          width: 200,
-                                          minHeight: 450
-                                        }}
-                                      >
-                                        {column.tasks.map(
-                                          (item: any, index: any) => {
-                                            return (
-                                              <Draggable
-                                                key={item.id}
-                                                draggableId={item.id}
-                                                index={index}
-                                              >
-                                                {(provided, snapshot) => {
-                                                  return (
-                                                    <div
-                                                      className="flex flex-row justify-start   w-full m-1 hover:bg-red-200 cursor-pointer hover:bg-opacity-70 p-1"
-                                                      ref={provided.innerRef}
-                                                      {...provided.draggableProps}
-                                                      {...provided.dragHandleProps}
-                                                      style={{
-                                                        userSelect: 'none',
-                                                        fontSize: '14px',
-                                                        borderRadius: '8px',
-                                                        fontWeight: 'normal',
-                                                        backgroundColor:
-                                                          snapshot.isDragging
-                                                            ? '#263B4A'
-                                                            : '#456C86',
-                                                        color: 'white',
-                                                        ...provided
-                                                          .draggableProps.style
-                                                      }}
-                                                    >
-                                                      {item.title}
-                                                    </div>
-                                                  );
-                                                }}
-                                              </Draggable>
-                                            );
-                                          }
-                                        )}
-                                        {provided.placeholder}
-                                      </div>
-                                    );
+                                  <h2>{column.name}</h2>
+                                  <div>
+                                    <Droppable
+                                      droppableId={columnId}
+                                      key={columnId}
+                                    >
+                                      {(provided, snapshot) => {
+                                        return (
+                                          <div
+                                            className="bg-neutral-200 border-2 border-neutral-300  h-96 rounded-lg flex flex-col items-center"
+                                            {...provided.droppableProps}
+                                            ref={provided.innerRef}
+                                            style={{
+                                              background:
+                                                snapshot.isDraggingOver
+                                                  ? 'lightblue'
+                                                  : 'lightgrey',
+                                              padding: 4,
+                                              width: 200,
+                                              minHeight: 450
+                                            }}
+                                          >
+                                            {column.tasks.map(
+                                              (item: any, index: any) => {
+                                                return (
+                                                  <Draggable
+                                                    key={item.id}
+                                                    draggableId={item.id}
+                                                    index={index}
+                                                  >
+                                                    {(provided, snapshot) => {
+                                                      return (
+                                                        <div
+                                                          className="flex flex-row justify-start   w-full m-1 hover:bg-red-200 cursor-pointer hover:bg-opacity-70 p-1"
+                                                          ref={
+                                                            provided.innerRef
+                                                          }
+                                                          {...provided.draggableProps}
+                                                          {...provided.dragHandleProps}
+                                                          style={{
+                                                            userSelect: 'none',
+                                                            fontSize: '14px',
+                                                            borderRadius: '8px',
+                                                            fontWeight:
+                                                              'normal',
+                                                            backgroundColor:
+                                                              snapshot.isDragging
+                                                                ? '#263B4A'
+                                                                : '#456C86',
+                                                            color: 'white',
+                                                            ...provided
+                                                              .draggableProps
+                                                              .style
+                                                          }}
+                                                        >
+                                                          {item.title}
+                                                        </div>
+                                                      );
+                                                    }}
+                                                  </Draggable>
+                                                );
+                                              }
+                                            )}
+                                            {provided.placeholder}
+                                          </div>
+                                        );
+                                      }}
+                                    </Droppable>
+                                  </div>
+                                </div>
+                              );
+                            }
+                          )}
+                          <Droppable droppableId={'3'}>
+                            {(provided, snapshot) => {
+                              return (
+                                <div
+                                  className=" border-2   h-96 rounded-lg flex flex-col "
+                                  {...provided.droppableProps}
+                                  ref={provided.innerRef}
+                                  style={{
+                                    background: snapshot.isDraggingOver
+                                      ? '#FFEBEE'
+                                      : 'white',
+                                    padding: 4,
+                                    width: 50,
+                                    height: 50
                                   }}
-                                </Droppable>
-                              </div>
-                            </div>
-                          );
-                        }
-                      )}
-                      <Droppable droppableId={'3'}>
-                        {(provided, snapshot) => {
-                          return (
-                            <div
-                              className=" border-2   h-96 rounded-lg flex flex-col "
-                              {...provided.droppableProps}
-                              ref={provided.innerRef}
-                              style={{
-                                background: snapshot.isDraggingOver
-                                  ? '#FFEBEE'
-                                  : 'white',
-                                padding: 4,
-                                width: 50,
-                                height: 50
-                              }}
-                            >
-                              <div>
-                                <svg
-                                  className="w-10 h-10"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  viewBox="0 0 24 24"
-                                  xmlns="http://www.w3.org/2000/svg"
                                 >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="1.5"
-                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                  ></path>
-                                </svg>
-                              </div>
-                              {provided.placeholder}
-                            </div>
-                          );
-                        }}
-                      </Droppable>
-                    </DragDropContext>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <svg
-                    role="status"
-                    className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-secondary-100"
-                    viewBox="0 0 100 101"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                      fill="currentColor"
-                    ></path>
-                    <path
-                      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                      fill="currentFill"
-                    ></path>
-                  </svg>
-                </>
-              )}
+                                  <div>
+                                    <svg
+                                      className="w-10 h-10"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="1.5"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                      ></path>
+                                    </svg>
+                                  </div>
+                                  {provided.placeholder}
+                                </div>
+                              );
+                            }}
+                          </Droppable>
+                        </DragDropContext>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <svg
+                        role="status"
+                        className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-secondary-100"
+                        viewBox="0 0 100 101"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                          fill="currentColor"
+                        ></path>
+                        <path
+                          d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                          fill="currentFill"
+                        ></path>
+                      </svg>
+                    </>
+                  )}
+                </div>
+                {/* right section */}
+                <div className="ml-4">
+                  <FilesList files={project.files} />
+                </div>
+              </div>
             </div>
           </div>
         </div>

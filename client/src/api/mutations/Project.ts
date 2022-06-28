@@ -7,7 +7,6 @@ export const CREATE_PROJECT = gql`
       title
       id
       description
-      image_url
       start_date
       end_date
       state

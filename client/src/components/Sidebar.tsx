@@ -9,7 +9,7 @@ const Sidebar = () => {
   const { signout } = useAuth();
   const navigate = useNavigate();
   return (
-    <div className="bg-gray-900 h-screen flex flex-col justify-between">
+    <div className="bg-gray-900 h-full flex flex-col justify-between">
       {/* up section */}
       <div className=" flex flex-col p-2">
         <div
