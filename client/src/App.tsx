@@ -14,6 +14,7 @@ import Signup from './pages/signup/Signup';
 import { ForgotPassword } from './pages/forgotPassword/ForgotPassword';
 import ResetPassword from './pages/forgotPassword/ResetPassword';
 import { AuthProvider } from './hooks/auth.hook';
+import Test from './pages/Test';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
                 path="/user/reset-password/:token"
                 element={<ResetPassword />}
               />
+              <Route path="/test" element={<Test />} />
             </Routes>
           </div>
         </BrowserRouter>

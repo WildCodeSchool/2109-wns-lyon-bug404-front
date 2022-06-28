@@ -74,7 +74,7 @@ export class ProjectResolver {
     return null;
   }
 
-  // assign memeber to project
+  // assign member to project
   @Mutation(() => Project!) async assignProjectToUser(
     @Arg('projectID') projectID: number,
     @Arg('userID') userID: number
@@ -93,7 +93,7 @@ export class ProjectResolver {
     return null;
   }
 
-  // unassign memeber from project
+  // unassign member from project
   @Mutation(() => Project!) async unassignUserFromProject(
     @Arg('projectID') projectID: number,
     @Arg('userID') userID: number

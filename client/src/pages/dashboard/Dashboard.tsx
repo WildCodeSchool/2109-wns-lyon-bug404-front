@@ -12,7 +12,7 @@ const Dashboard = () => {
       <div className="basis-1/5">
         <Sidebar />
       </div>
-      <div className="basis-4/5 flex flex-col overflow-y-scroll">
+      <div className="basis-4/5 flex flex-col overflow-y-scroll ">
         <Nav page={'Home'} />
         <div className=" ">
           <ProjectSection />

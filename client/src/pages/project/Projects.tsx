@@ -19,7 +19,7 @@ export const Projects = () => {
       <div className="basis-1/5">
         <Sidebar />
       </div>
-      <div className="basis-4/5 flex flex-col">
+      <div className="basis-4/5 flex flex-col ">
         <Nav page={'Projects'} />
         <div className="p-8 bg-slate-200 ">
           {projects.length > 0 && (

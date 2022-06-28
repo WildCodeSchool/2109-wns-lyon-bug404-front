@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 // get projects
 export const GET_ALL_PROJECTS = gql`
@@ -23,7 +23,7 @@ export const GET_ONE_PROJECT = gql`
       id
       title
       description
-      image_url
+      # image_url
       start_date
       end_date
       state
@@ -45,6 +45,10 @@ export const GET_ONE_PROJECT = gql`
         title
         description
         due_date
+      }
+      files {
+        publicUrl
+        filename
       }
     }
   }
