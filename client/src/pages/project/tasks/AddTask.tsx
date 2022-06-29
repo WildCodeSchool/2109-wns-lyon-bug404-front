@@ -2,18 +2,22 @@ import React from 'react';
 
 const AddTask = () => {
   return (
-    <button type="button" className="secondaryBtn bg-secondary-100 w-28">
+    <div className="flex w-9 h-12 items-center  justify-center  bg-green-100 rounded-xl mr-2 cursor-pointer">
       <svg
-        width="20"
-        height="20"
-        fill="currentColor"
-        className="mr-2"
-        aria-hidden="true"
+        className="h-6 w-6 stroke-primary "
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        <path d="M10 5a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-3v3a1 1 0 1 1-2 0v-3H6a1 1 0 1 1 0-2h3V6a1 1 0 0 1 1-1Z" />
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+        />
       </svg>
-      task
-    </button>
+    </div>
   );
 };
 

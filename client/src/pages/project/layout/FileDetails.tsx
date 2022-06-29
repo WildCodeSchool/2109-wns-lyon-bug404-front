@@ -63,7 +63,7 @@ const FileDetails = ({ file }: { file: FileInterface }) => {
 
   return (
     <div
-      className="flex flex-row  p-2 items-center cursor-pointer"
+      className="flex flex-row  p-2 items-center cursor-pointer hover:bg-gray-200 rounded-md "
       onClick={
         isImage
           ? handleOpen

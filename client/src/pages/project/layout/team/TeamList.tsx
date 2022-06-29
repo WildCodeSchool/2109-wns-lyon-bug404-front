@@ -25,12 +25,12 @@ const TeamList = ({ teamMember }: { teamMember: TeamMemberInterface }) => {
               teamMember.firstName.toUpperCase().charAt(0)
             )}`
           }}
-          className="bg-opacity-50 rounded-full w-12 h-12 p-2 flex flex-row items-center justify-center font-semibold"
+          className="bg-opacity-50 text-sm rounded-full w-10 h-10 p-2 flex flex-row items-center justify-center font-semibold"
         >
           {teamMember.firstName.toUpperCase().charAt(0) +
             teamMember.familyName.toUpperCase().charAt(0)}
         </div>
-        <div className="text-sm ml-2">
+        <div className="text-xs  ml-2">
           {teamMember.firstName} {teamMember.familyName.toUpperCase()}
         </div>
       </div>
