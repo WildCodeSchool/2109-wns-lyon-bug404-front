@@ -1,8 +1,10 @@
 import React from 'react';
+import { TeamMemberInterface } from '../../../interfaces/TeamMemberInterface';
+import TeamList from './team/TeamList';
 
-const TeamOnProject = () => {
+const TeamOnProject = ({ team }: { team: [TeamMemberInterface] }) => {
   return (
-    <div className="mt-4">
+    <div className="flex flex-col mt-4">
       <div className="flex flex-row justify-start items-center my-4">
         <svg
           className="h-6 w-6 stroke-primary"
@@ -20,6 +22,18 @@ const TeamOnProject = () => {
         </svg>
         <h2 className="font-medium text-primary mt-1">Team</h2>
       </div>
+      {team && team.length > 0 ? (
+        <div className="documentBox">
+          {team
+            .slice()
+            .reverse()
+            .map((member) => (
+              <TeamList teamMember={member} />
+            ))}
+        </div>
+      ) : (
+        <div>No members </div>
+      )}
     </div>
   );
 };

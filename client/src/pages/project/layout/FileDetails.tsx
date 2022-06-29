@@ -1,47 +1,103 @@
 import React, { useEffect, useState } from 'react';
 import { FileInterface } from '../../../interfaces/FileInterface';
 import Modal from '../../../layout/Modal';
+import FileModalContent from './file/FileModalContent';
 const pdfImg = require('../../../assets/pdf.png');
 const imageImg = require('../../../assets/image.png');
+const docImg = require('../../../assets/doc.png');
 
 const FileDetails = ({ file }: { file: FileInterface }) => {
   const [showModal, setShowModal] = useState(false);
-  const handleClose = () => {
-    console.log('hi');
-    setShowModal(false);
+  const [fileExtension, setFileExtension] = useState('');
+  const [close, setClose] = useState(false);
+  const [isImage, setIsImage] = useState(false);
+  const [isDoc, setIsDoc] = useState(false);
+  const [isPdf, setIsPdf] = useState(false);
+
+  const getFileExtension = () => {
+    const ext = file.filename.split('.').pop();
+    if (ext) {
+      setFileExtension(ext);
+    }
+  };
+  useEffect(() => {
+    getFileExtension();
+  }, []);
+
+  useEffect(() => {
+    if (
+      fileExtension === 'png' ||
+      fileExtension === 'jpg' ||
+      fileExtension === 'jpeg' ||
+      fileExtension === 'tiff' ||
+      fileExtension === 'bmp' ||
+      fileExtension === 'gif'
+    ) {
+      setIsImage(true);
+      setIsDoc(false);
+      setIsPdf(false);
+    }
+    if (fileExtension === 'pdf') {
+      setIsImage(false);
+      setIsPdf(true);
+      setIsDoc(false);
+    }
+    if (fileExtension === 'docx' || fileExtension === 'doc') {
+      setIsImage(false);
+      setIsPdf(false);
+      setIsDoc(true);
+    }
+  }, [fileExtension]);
+
+  const handleClose = async () => {
+    setClose(true);
   };
   const handleOpen = () => {
     setShowModal(true);
   };
-
   useEffect(() => {
-    console.log(showModal);
-  }, [showModal]);
+    if (close) {
+      setShowModal(false);
+    }
+  }, [close]);
 
   return (
     <div
       className="flex flex-row  p-2 items-center cursor-pointer"
-      onClick={handleOpen}
+      onClick={
+        isImage
+          ? handleOpen
+          : () => {
+              window.open(file.publicUrl, '_blank');
+            }
+      }
     >
       {/* icon */}
       <div>
-        <img alt="hi" src={imageImg} className="h-9 w-9" />
+        {isPdf && <img alt="hi" src={pdfImg} className="h-9 w-9" />}
+        {isImage && <img alt="hi" src={imageImg} className="h-9 w-9" />}
+
+        {isDoc && <img alt="hi" src={docImg} className="h-9 w-9" />}
       </div>
       {/* content */}
       <div className="text-sm">{file.filename}</div>
 
       {showModal && (
-        <Modal handleClose={handleClose}>
-          <>
-            <img alt="hi" src={file.publicUrl} />
-            <button
-              onClick={handleClose}
-              className="justify-center secondaryBtn w-32 bg-zinc-500"
-            >
-              Close
-            </button>
-          </>
-        </Modal>
+        <>
+          {isImage && (
+            <Modal handleClose={handleClose}>
+              <>
+                <FileModalContent
+                  file={file}
+                  handleClose={handleClose}
+                  isPdf={isPdf}
+                  isImage={isImage}
+                  isDoc={isDoc}
+                />
+              </>
+            </Modal>
+          )}
+        </>
       )}
     </div>
   );

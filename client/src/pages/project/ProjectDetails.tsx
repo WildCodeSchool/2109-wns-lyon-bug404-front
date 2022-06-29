@@ -58,6 +58,7 @@ export const ProjectDetails = () => {
     if (data) {
       setProject(data.getProject);
       setProjectId(data.getProject.id);
+      console.log(data.getProject);
     }
   }, [data]);
 
@@ -147,7 +148,8 @@ export const ProjectDetails = () => {
                 <ProjectBadge state={project.state} />
               </div>
               <p className="text-sm mt-1">{project.description}</p>
-              <UploadFile projectId={parseInt(projectId)} />
+              {/* <UploadFile projectId={parseInt(projectId)} /> */}
+
               <div className="flex flex-row">
                 {/* left section */}
                 <div className="w-8/12">
@@ -307,8 +309,8 @@ export const ProjectDetails = () => {
                 </div>
                 {/* right section */}
                 <div className="ml-4">
-                  <FilesList files={project.files} />
-                  <TeamOnProject />
+                  <FilesList files={project.files} projectId={projectId} />
+                  <TeamOnProject team={project.assigned_users} />
                 </div>
               </div>
             </div>

@@ -3,10 +3,16 @@ import { FileInterface } from '../../../interfaces/FileInterface';
 import FileDetails from './FileDetails';
 import FilesHeader from './FilesHeader';
 
-const FilesList = ({ files }: { files: FileInterface[] }) => {
+const FilesList = ({
+  files,
+  projectId
+}: {
+  files: FileInterface[];
+  projectId: string;
+}) => {
   return (
     <div className="">
-      <FilesHeader />
+      <FilesHeader projectId={projectId} />
       {files && files.length > 0 ? (
         <div className="documentBox">
           {files

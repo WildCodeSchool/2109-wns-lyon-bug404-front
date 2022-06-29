@@ -16,13 +16,13 @@ const UploadFile = ({ projectId }: { projectId: number }): JSX.Element => {
   };
   return (
     <>
-      <div className="mt-2 flex">
+      <div className="flex w-9 h-12 items-center    bg-green-100 rounded-xl">
         <label
           htmlFor="files"
-          className="flex flex-row text-sm cursor-pointer bg-green-100 w-40 justify-center items-center rounded-md p-1"
+          className=" items-center text-sm cursor-pointer   "
         >
           <svg
-            className="w-8 h-8 "
+            className="w-8 h-8 stroke-primary"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -35,7 +35,6 @@ const UploadFile = ({ projectId }: { projectId: number }): JSX.Element => {
               d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
             />
           </svg>
-          Select a file
         </label>
         <input
           id="files"

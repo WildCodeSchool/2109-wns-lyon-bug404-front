@@ -29,7 +29,6 @@ export const GET_ONE_PROJECT = gql`
       state
       created_by {
         email
-        password
         firstName
         familyName
         role
