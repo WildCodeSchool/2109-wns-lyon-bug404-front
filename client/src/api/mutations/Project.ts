@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 // add a new project
 export const CREATE_PROJECT = gql`
@@ -7,12 +7,23 @@ export const CREATE_PROJECT = gql`
       title
       id
       description
-      image_url
       start_date
       end_date
       state
       created_by {
         email
+        id
+      }
+    }
+  }
+`;
+
+// initiate task for new project
+export const INITIATE_TASK_FOR_PROJECT = gql`
+  mutation InitiateProjectStatus($projectId: Float!) {
+    initiateProjectStatus(projectID: $projectId) {
+      taskStatus {
+        name
       }
     }
   }

@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ProjectBadge } from "../../../components/ProjectBadge";
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ProjectBadge } from '../../../components/ProjectBadge';
 
 interface ProjectInterface {
   id: number;
@@ -27,7 +27,7 @@ export const ProjectCard = ({ project }: { project: ProjectInterface }) => {
           <div className="div">
             <span className="font-bold">{project.title}</span>
             <span className="block text-gray-500 text-sm mt-2">
-              {project.description}
+              {project.description.slice(0, 90) + '...'}
             </span>
           </div>
           <ProjectBadge state={project.state} />

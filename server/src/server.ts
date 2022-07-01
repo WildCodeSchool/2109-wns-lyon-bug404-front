@@ -1,6 +1,9 @@
 import 'reflect-metadata';
+import express from 'express';
+import { graphqlUploadExpress } from 'graphql-upload';
 import path from 'path';
-import { ApolloServer } from 'apollo-server';
+import cors from 'cors';
+import { ApolloServer } from 'apollo-server-express';
 import { createConnection } from 'typeorm';
 import { buildSchema } from 'type-graphql';
 import { config } from './config/config';
@@ -10,6 +13,7 @@ import { UsersResolver } from './resolvers/UserResolver';
 import { customAuthChecker } from './auth/auth';
 import { CategoryResolver } from './resolvers/CategoryResolver';
 import { StatusResolver } from './resolvers/StatusResolver';
+import { ProfileFileResolver } from './resolvers/UploadFileResolver';
 
 export async function bootstrap() {
   console.log(
@@ -32,7 +36,9 @@ export async function bootstrap() {
       ProjectResolver,
       UsersResolver,
       CategoryResolver,
-      StatusResolver
+      StatusResolver,
+      ProfileFileResolver
+      // ProfileFileResolver
     ],
     authChecker: customAuthChecker
   });
@@ -55,9 +61,16 @@ export async function bootstrap() {
       };
     }
   });
+  await server.start();
+  const app = express();
+  app.use(cors());
+  app.use(graphqlUploadExpress());
+  server['applyMiddleware']({ app });
+  app.use('/files', express.static(path.join(__dirname, 'files')));
 
-  const { url } = await server.listen(config.port);
-  console.log(`Server is running, GraphQL Playund available at ${url}`);
+  await app.listen(config.port);
+
+  console.log(`Server is running, GraphQL Playund available at ${config.port}`);
 }
 
 bootstrap();

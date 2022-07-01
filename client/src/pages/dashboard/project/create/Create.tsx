@@ -1,18 +1,21 @@
-import { ApolloQueryResult, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import React, { useState } from 'react';
-import { CREATE_PROJECT } from '../../../../api/mutations/Project';
+import {
+  CREATE_PROJECT,
+  INITIATE_TASK_FOR_PROJECT
+} from '../../../../api/mutations/Project';
+import { useAuth } from '../../../../hooks/auth.hook';
 import Modal from '../../../../layout/Modal';
 
 const Create = ({ refetchProjects }: { refetchProjects: Function }) => {
+  const { user } = useAuth();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [createdBy, setCretedBy] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [doCreateProject, { data, loading, error }] =
-    useMutation(CREATE_PROJECT);
+  const [doCreateProject] = useMutation(CREATE_PROJECT);
+  const [doInitiateTask] = useMutation(INITIATE_TASK_FOR_PROJECT);
 
   const handleClose = () => {
     setShowModal(false);
@@ -30,15 +33,19 @@ const Create = ({ refetchProjects }: { refetchProjects: Function }) => {
           project: {
             title: title,
             description: description,
-            image_url: 'url super url',
             start_date: startDate,
             end_date: endDate
           },
-          userId: 45
+          userId: user!.id
         }
       });
       if (result.data) {
         // success
+        await doInitiateTask({
+          variables: {
+            projectId: parseFloat(result.data.createProject.id)
+          }
+        });
         await refetchProjects();
         setShowModal(false);
       }

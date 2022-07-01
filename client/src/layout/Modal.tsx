@@ -1,6 +1,6 @@
-import "./Modal.css";
+import './Modal.css';
 
-import React, { ReactChildren, ReactChild } from "react";
+import React, { ReactChildren, ReactChild } from 'react';
 
 interface AuxProps {
   children: ReactChild | ReactChildren;

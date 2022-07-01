@@ -1,9 +1,9 @@
-import { Query, Resolver, Mutation, Arg } from "type-graphql";
-import { Task, TaskInput, TaskUpdateInput } from "../models/Task";
-import { getRepository } from "typeorm";
-import { Project } from "../models/Project";
-import { User } from "../models/User";
-import { Status } from "../models/Status";
+import { Query, Resolver, Mutation, Arg } from 'type-graphql';
+import { Task, TaskInput, TaskUpdateInput } from '../models/Task';
+import { getRepository } from 'typeorm';
+import { Project } from '../models/Project';
+import { User } from '../models/User';
+import { Status } from '../models/Status';
 
 @Resolver()
 export class TaskResolver {
@@ -20,15 +20,15 @@ export class TaskResolver {
 
   // Get one task
   @Query(() => Task!, { nullable: true })
-  async getTask(@Arg("taskID") id: number): Promise<Task> {
+  async getTask(@Arg('taskID') id: number): Promise<Task> {
     return await this.taskRepository.findOne(id);
   }
 
   //Create a task
   @Mutation(() => Task)
   async createTask(
-    @Arg("task") newTaskData: TaskInput,
-    @Arg("projectID") projectID: number
+    @Arg('task') newTaskData: TaskInput,
+    @Arg('projectID') projectID: number
   ): Promise<Task> {
     const project = await this.projectRepository.findOne(projectID);
     const finalTask = { ...newTaskData, project: project };
@@ -40,7 +40,7 @@ export class TaskResolver {
   //delete a task
   @Mutation(() => Task!, { nullable: true })
   async deleteTask(
-    @Arg("taskID") id: string
+    @Arg('taskID') id: string
   ): Promise<Task | undefined | null> {
     const allTasks = await this.taskRepository;
     const task = await allTasks.findOne(id);
@@ -53,8 +53,8 @@ export class TaskResolver {
 
   // Update a task
   @Mutation(() => Task!) async updateTask(
-    @Arg("task", () => TaskUpdateInput) newTaskData: Task,
-    @Arg("taskID") id: number
+    @Arg('task', () => TaskUpdateInput) newTaskData: Task,
+    @Arg('taskID') id: number
   ): Promise<Task | null> {
     const task = await Task.findOne(id);
     if (task) {
@@ -67,8 +67,8 @@ export class TaskResolver {
 
   // assign person to task
   @Mutation(() => Task!) async assignTaskToUser(
-    @Arg("taskID") taskID: number,
-    @Arg("userID") userID: number
+    @Arg('taskID') taskID: number,
+    @Arg('userID') userID: number
   ): Promise<Task | null> {
     const user = await this.userRepository.findOne(userID);
     const task = await this.taskRepository.findOne(taskID);
@@ -82,8 +82,8 @@ export class TaskResolver {
 
   // unassign memeber from project
   @Mutation(() => Task!) async unassignUserFromTask(
-    @Arg("taskID") taskID: number,
-    @Arg("userID") userID: number
+    @Arg('taskID') taskID: number,
+    @Arg('userID') userID: number
   ): Promise<Task | null> {
     const task = await this.taskRepository.findOne(taskID);
     if (task.assigned_to) {
@@ -95,20 +95,20 @@ export class TaskResolver {
 
   // initiate task status
   @Mutation(() => Task!) async initiateTaskStatus(
-    @Arg("projectID") projectID: number,
-    @Arg("taskID") taskID: number
+    @Arg('projectID') projectID: number,
+    @Arg('taskID') taskID: number
   ): Promise<Task | null> {
     const status = await this.statusRepository.findOne({
       where: {
-        name: "To do",
-        project: projectID,
-      },
+        name: 'To do',
+        project: projectID
+      }
     });
     const task = await this.taskRepository.findOne({
       where: {
         project: projectID,
-        id: taskID,
-      },
+        id: taskID
+      }
     });
 
     if (status && task) {
@@ -121,21 +121,21 @@ export class TaskResolver {
 
   // change status
   @Mutation(() => Task!) async changeStatusToTask(
-    @Arg("projectID") projectID: number,
-    @Arg("taskID") taskID: number,
-    @Arg("statusName") statusName: string
+    @Arg('projectID') projectID: number,
+    @Arg('taskID') taskID: number,
+    @Arg('statusName') statusName: string
   ): Promise<Task | null> {
     const status = await this.statusRepository.findOne({
       where: {
         name: statusName,
-        project: projectID,
-      },
+        project: projectID
+      }
     });
     const task = await this.taskRepository.findOne({
       where: {
         project: projectID,
-        id: taskID,
-      },
+        id: taskID
+      }
     });
 
     if (status && task) {

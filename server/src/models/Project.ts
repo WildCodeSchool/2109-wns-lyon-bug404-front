@@ -1,4 +1,4 @@
-import { Field, ID, InputType, ObjectType } from "type-graphql";
+import { Field, ID, InputType, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
   Column,
@@ -6,12 +6,13 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   ManyToOne,
-  ManyToMany,
-} from "typeorm";
-import { ProjectStates } from "../enums/ProjectStates";
-import { Task } from "./Task";
-import { User } from "./User";
-import { Status } from "./Status";
+  ManyToMany
+} from 'typeorm';
+import { ProjectStates } from '../enums/ProjectStates';
+import { Task } from './Task';
+import { User } from './User';
+import { Status } from './Status';
+import { MediaFile } from './MediaFile';
 
 @ObjectType()
 @Entity()
@@ -28,27 +29,27 @@ export class Project extends BaseEntity {
   @Column()
   description!: string;
 
-  @Field()
-  @Column()
-  image_url!: string;
+  // @Field()
+  // @Column()
+  // image_url!: string;
 
   @Field()
   @Column({
-    type: "datetime",
+    type: 'datetime'
   })
   start_date!: Date;
 
   @Field()
   @Column({
-    type: "datetime",
+    type: 'datetime'
   })
   end_date?: Date;
 
   @Field()
   @Column({
-    type: "enum",
+    type: 'enum',
     enum: ProjectStates,
-    default: ProjectStates.ON_TRACK,
+    default: ProjectStates.ON_TRACK
   })
   state!: ProjectStates;
 
@@ -67,6 +68,10 @@ export class Project extends BaseEntity {
   @Field(() => [Status])
   @OneToMany(() => Status, (status) => status.project)
   taskStatus!: Status[];
+
+  @Field(() => [MediaFile], { nullable: true })
+  @OneToMany(() => MediaFile, (file) => file.project, { lazy: true })
+  files?: MediaFile[];
 }
 
 @InputType()
@@ -77,8 +82,8 @@ export class ProjectInput extends BaseEntity {
   @Field()
   description!: string;
 
-  @Field()
-  image_url!: string;
+  // @Field()
+  // image_url!: string;
 
   @Field()
   start_date!: Date;
@@ -95,8 +100,8 @@ export class ProjectUpdateInput extends BaseEntity {
   @Field({ nullable: true })
   description!: string;
 
-  @Field({ nullable: true })
-  image_url!: string;
+  // @Field({ nullable: true })
+  // image_url!: string;
 
   @Field({ nullable: true })
   end_date!: string;

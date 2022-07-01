@@ -51,16 +51,16 @@ export class UsersResolver {
       });
       newUser.assigned_tasks = [];
 
-      const validateUrl = await createConfirmationUrl(email, 'confirm');
-      const emailObject: EmailInterface = {
-        from: 'noreply@taskhub.com', // sender address
-        to: email, // list of receivers
-        subject: 'Confirmation compte TaskHub', // Subject line
-        text: 'Veuillez cliquer sur le lien pour confirmer votre adresse email.', // plain text body
-        html: `<p>Veuillez cliquer sur le lien pour confirmer votre adresse email.</p><a href="${validateUrl}">${validateUrl}</a>` // html body
-      };
+      // const validateUrl = await createConfirmationUrl(email, 'confirm');
+      // const emailObject: EmailInterface = {
+      //   from: 'noreply@taskhub.com', // sender address
+      //   to: email, // list of receivers
+      //   subject: 'Confirmation compte TaskHub', // Subject line
+      //   text: 'Veuillez cliquer sur le lien pour confirmer votre adresse email.', // plain text body
+      //   html: `<p>Veuillez cliquer sur le lien pour confirmer votre adresse email.</p><a href="${validateUrl}">${validateUrl}</a>` // html body
+      // };
 
-      await sendEmail(emailObject);
+      // await sendEmail(emailObject);
       await newUser.save();
 
       return newUser;
@@ -82,12 +82,15 @@ export class UsersResolver {
         const token = jwt.sign({ userId: user.id }, 'supersecret', {
           expiresIn: '24h' // expires in 24 hours
         });
+
         return token;
       } else {
         return null;
       }
     } else {
-      return null;
+      // console.log(3);
+      // return null;
+      throw new Error('User is not confirmed');
     }
   }
 
@@ -156,9 +159,14 @@ export class UsersResolver {
         expiresIn: '24h' // expires in 24 hours
       });
       let newPassword = await argon2.hash(reset.password);
+
+      console.log(decoded);
+
       await User.update({ email: decoded.email }, { password: newPassword });
+      console.log(newPassword);
       return true;
     } catch (e) {
+      console.log(e);
       return false;
     }
   }

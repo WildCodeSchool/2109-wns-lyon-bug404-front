@@ -1,0 +1,29 @@
+import React from 'react';
+import UploadFile from './UploadFile';
+
+const FilesHeader = ({ projectId }: { projectId: string }) => {
+  return (
+    <div className="w-96 flex flex-row justify-between items-center my-4">
+      <div className="flex flex-row justify-start items-center">
+        <svg
+          className="h-6 w-6 stroke-primary"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"
+          />
+        </svg>
+        <h2 className="font-medium text-primary mt-1">Documents</h2>
+      </div>
+      <UploadFile projectId={parseInt(projectId)} />
+    </div>
+  );
+};
+
+export default FilesHeader;
