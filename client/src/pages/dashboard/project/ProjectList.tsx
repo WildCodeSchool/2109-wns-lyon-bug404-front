@@ -20,7 +20,8 @@ export const ProjectList = ({
       {projects && (
         <>
           {projects
-            .slice(projects.length - 4, projects.length)
+            // .slice(projects.length - 4, projects.length)
+            .slice()
             .reverse()
             .map((project: ProjectInterface) => (
               <ProjectCard project={project} key={project.id} />

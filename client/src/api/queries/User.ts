@@ -11,3 +11,17 @@ export const GET_PROFILE = gql`
     }
   }
 `;
+
+// @Get all users
+export const GET_ALL_USERS = gql`
+  query Query {
+    getUsers {
+      id
+      email
+      password
+      firstName
+      familyName
+      role
+    }
+  }
+`;
