@@ -1,5 +1,7 @@
 .landing-page {
-  background-image: url("../../assets/landingPage.png");
+  background-image: url('../../assets/landingPage.png');
   background-size: cover;
   background-position: center;
+  width: 100vw !important;
+  height: 100vh;
 }
