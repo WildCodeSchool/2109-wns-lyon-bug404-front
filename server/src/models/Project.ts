@@ -49,7 +49,7 @@ export class Project extends BaseEntity {
   })
   state!: ProjectStates;
 
-  @Field()
+  @Field(() => User)
   @ManyToOne(() => User, (user) => user.id)
   created_by: User;
 

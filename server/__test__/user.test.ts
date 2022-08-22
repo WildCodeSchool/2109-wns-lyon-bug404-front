@@ -12,13 +12,10 @@ mutation Signin($password: String!, $email: String!) {
 
 let conn: Connection;
 beforeAll(async () => {
-  console.log(1);
   conn = await testConn();
-  console.log(conn);
 });
 
 afterAll(async () => {
-  console.log(2);
   await conn.close();
 });
 
@@ -44,7 +41,13 @@ describe('Register', () => {
   it('create user', async () => {
     console.log(
       await gCall({
-        source: registerMutation
+        source: registerMutation,
+        variableValues: {
+          password: 'test1234',
+          email: 'hkarimo@hotil.com',
+          familyName: 'htr',
+          firstName: 'karim'
+        }
       })
     );
   });
