@@ -34,7 +34,7 @@ services:
     #   dockerfile: dev.dockerfile
     container_name: 404bugs_client
     ports:
-      - ${GATEWAY_CLIENT:-3000}:3000
+      - ${GATEWAY_CLIENT:-3001}:3001
     volumes:
       - ./client/src:/app/src
       - ./client/public:/app/public
