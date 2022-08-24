@@ -24,10 +24,6 @@ export async function bootstrap() {
     url: `${config.server}://${config.db_uname}:${config.db_password}@${config.host}/${config.db}`,
     entities: [path.resolve(__dirname, './models/*.{ts,js}')],
     synchronize: true
-    // ssl: {
-    //   rejectUnauthorized: false
-    // }
-    // logging: ["query", "error"],
   });
 
   const schema = await buildSchema({
@@ -38,7 +34,6 @@ export async function bootstrap() {
       CategoryResolver,
       StatusResolver,
       ProfileFileResolver
-      // ProfileFileResolver
     ],
     authChecker: customAuthChecker
   });

@@ -59,8 +59,8 @@ export class UsersResolver {
       //   text: 'Veuillez cliquer sur le lien pour confirmer votre adresse email.', // plain text body
       //   html: `<p>Veuillez cliquer sur le lien pour confirmer votre adresse email.</p><a href="${validateUrl}">${validateUrl}</a>` // html body
       // };
-
       // await sendEmail(emailObject);
+
       await newUser.save();
 
       return newUser;
@@ -79,7 +79,7 @@ export class UsersResolver {
 
     if (user && user.confirmed) {
       if (await argon2.verify(user.password, password)) {
-        const token = jwt.sign({ userId: user.id }, 'supersecret', {
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
           expiresIn: '24h' // expires in 24 hours
         });
 
@@ -88,8 +88,6 @@ export class UsersResolver {
         return null;
       }
     } else {
-      // console.log(3);
-      // return null;
       throw new Error('User is not confirmed');
     }
   }
@@ -98,7 +96,7 @@ export class UsersResolver {
   @Mutation(() => Boolean)
   async confirmUser(@Arg('token') token: string): Promise<boolean> {
     try {
-      const decoded = jwt.verify(token, 'supersecret', {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET, {
         expiresIn: '24h' // expires in 24 hours
       });
       await User.update({ email: decoded.email }, { confirmed: true });
@@ -159,11 +157,7 @@ export class UsersResolver {
         expiresIn: '24h' // expires in 24 hours
       });
       let newPassword = await argon2.hash(reset.password);
-
-      console.log(decoded);
-
       await User.update({ email: decoded.email }, { password: newPassword });
-      console.log(newPassword);
       return true;
     } catch (e) {
       console.log(e);

@@ -13,6 +13,7 @@ import DueDate from './layout/DueDate';
 import UploadFile from './layout/UploadFile';
 import TaskHeader from './layout/TaskHeader';
 import FilesList from './layout/FilesList';
+import TeamOnProject from './layout/TeamOnProject';
 
 export const ProjectDetails = () => {
   const { id } = useParams();
@@ -57,6 +58,7 @@ export const ProjectDetails = () => {
     if (data) {
       setProject(data.getProject);
       setProjectId(data.getProject.id);
+      console.log(data.getProject);
     }
   }, [data]);
 
@@ -146,7 +148,8 @@ export const ProjectDetails = () => {
                 <ProjectBadge state={project.state} />
               </div>
               <p className="text-sm mt-1">{project.description}</p>
-              <UploadFile projectId={parseInt(projectId)} />
+              {/* <UploadFile projectId={parseInt(projectId)} /> */}
+
               <div className="flex flex-row">
                 {/* left section */}
                 <div className="w-8/12">
@@ -188,7 +191,7 @@ export const ProjectDetails = () => {
                                                   ? 'lightblue'
                                                   : 'lightgrey',
                                               padding: 4,
-                                              width: 200,
+                                              width: 180,
                                               minHeight: 450
                                             }}
                                           >
@@ -306,7 +309,8 @@ export const ProjectDetails = () => {
                 </div>
                 {/* right section */}
                 <div className="ml-4">
-                  <FilesList files={project.files} />
+                  <FilesList files={project.files} projectId={projectId} />
+                  <TeamOnProject team={project.assigned_users} />
                 </div>
               </div>
             </div>

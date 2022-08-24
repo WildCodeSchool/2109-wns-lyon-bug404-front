@@ -1,13 +1,13 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import Header from "../../components/Header";
-const redirectImage = require("../../assets/redirect.png");
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Header from '../../components/Header';
+const redirectImage = require('../../assets/redirect.png');
 
 export const Redirect = () => {
   const navigate = useNavigate();
   useEffect(() => {
     setTimeout(() => {
-      navigate("/");
+      navigate('/');
     }, 6000);
   }, []);
 
@@ -20,7 +20,7 @@ export const Redirect = () => {
         </div>
 
         <div className="flex justify-center justify-items-center m-auto">
-          {" "}
+          {' '}
           <h3 className="text-center text-lg font-bold h-1/3">
             A confirmation mail has been sent to you, please confirm your email
             address

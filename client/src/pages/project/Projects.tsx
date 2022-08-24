@@ -15,7 +15,7 @@ export const Projects = () => {
     }
   }, [data]);
   return (
-    <div className="flex flex-row w-screen">
+    <div className="flex flex-row w-screen h-screen">
       <div className="basis-1/5">
         <Sidebar />
       </div>
