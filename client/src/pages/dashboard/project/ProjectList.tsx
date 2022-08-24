@@ -16,11 +16,11 @@ export const ProjectList = ({
   projects: ProjectInterface[];
 }): JSX.Element => {
   return (
-    <div className=" grid grid-cols-5 gap-0  px-8 cursor-pointer">
+    <div className=" grid grid-cols-4 gap-4  px-8 cursor-pointer">
       {projects && (
         <>
           {projects
-            // .slice(projects.length - 4, projects.length)
+            .slice(projects.length - 3, projects.length)
             .slice()
             .reverse()
             .map((project: ProjectInterface) => (

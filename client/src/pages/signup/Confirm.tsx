@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Header from "../../components/Header";
-import { useParams } from "react-router-dom";
-import { CONFIRM_USER } from "../../api/mutations/User";
-import { useMutation } from "@apollo/client";
-const confirmSuccess = require("../../assets/confirmSuccess.png");
-const confirmError = require("../../assets/confirmError.png");
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Header from '../../components/Header';
+import { useParams } from 'react-router-dom';
+import { CONFIRM_USER } from '../../api/mutations/User';
+import { useMutation } from '@apollo/client';
+const confirmSuccess = require('../../assets/confirmSuccess.png');
+const confirmError = require('../../assets/confirmError.png');
 
 export const Confirm = () => {
   const { token } = useParams();
@@ -16,12 +16,12 @@ export const Confirm = () => {
   useEffect(() => {
     if (token) {
       doConfirmUser({
-        variables: { token },
+        variables: { token }
       });
     }
 
     setTimeout(() => {
-      navigate("/login");
+      navigate('/login');
     }, 6000);
   }, [token]);
 
@@ -44,7 +44,7 @@ export const Confirm = () => {
         </div>
 
         <div className="flex justify-center justify-items-center m-auto">
-          {" "}
+          {' '}
           <h3 className="text-center text-lg font-bold h-1/3">
             {tokenIsValid ? (
               <>Your mail is confirmed, you can now log with your new account</>

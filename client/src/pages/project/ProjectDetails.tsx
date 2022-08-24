@@ -191,7 +191,7 @@ export const ProjectDetails = () => {
                                                   ? 'lightblue'
                                                   : 'lightgrey',
                                               padding: 4,
-                                              width: 200,
+                                              width: 180,
                                               minHeight: 450
                                             }}
                                           >

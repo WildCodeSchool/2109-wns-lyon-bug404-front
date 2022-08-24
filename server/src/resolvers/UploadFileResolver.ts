@@ -1,8 +1,7 @@
-import { Resolver, Mutation, Arg, ID } from 'type-graphql';
-import { GraphQLUpload } from 'graphql-upload';
-import { createReadStream, createWriteStream } from 'fs';
-
-import { Upload } from '../types/Upload';
+import { Resolver, Mutation, Arg } from 'type-graphql';
+// import { GraphQLUpload } from 'graphql-upload';
+import { createWriteStream } from 'fs';
+// import { Upload } from '../types/Upload';
 import { Project } from '../models/Project';
 import { MediaFile, MediaFileInput } from '../models/MediaFile';
 import { getRepository } from 'typeorm';
@@ -10,6 +9,7 @@ import { getRepository } from 'typeorm';
 @Resolver()
 export class ProfileFileResolver {
   private mediaRepository = getRepository(MediaFile);
+
   @Mutation(() => MediaFile)
   async addProjectFile(
     @Arg('projectID') projectID: number,
@@ -23,7 +23,6 @@ export class ProfileFileResolver {
         publicUrl: `http://localhost:4001/files/${file.filename}`,
         project: project
       });
-
       return new Promise(async (resolve, reject) =>
         file
           .createReadStream()
@@ -34,7 +33,6 @@ export class ProfileFileResolver {
           .on('error', () => reject(false))
       );
     } else {
-      console.log(3);
       return null;
     }
   }

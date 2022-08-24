@@ -29,10 +29,6 @@ export class Project extends BaseEntity {
   @Column()
   description!: string;
 
-  // @Field()
-  // @Column()
-  // image_url!: string;
-
   @Field()
   @Column({
     type: 'datetime'
@@ -53,7 +49,7 @@ export class Project extends BaseEntity {
   })
   state!: ProjectStates;
 
-  @Field()
+  @Field(() => User)
   @ManyToOne(() => User, (user) => user.id)
   created_by: User;
 

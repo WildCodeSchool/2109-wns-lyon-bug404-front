@@ -9,8 +9,10 @@ import Modal from '../../../../layout/Modal';
 
 const Create = ({ refetchProjects }: { refetchProjects: Function }) => {
   const { user } = useAuth();
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState('The lightest frisbee');
+  const [description, setDescription] = useState(
+    'Best new light fly disk with a 3D printing technology'
+  );
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -184,7 +186,7 @@ const Create = ({ refetchProjects }: { refetchProjects: Function }) => {
                 </div>
               </div>
             </form>
-            <div className="flex justify-around mt-4">
+            <div className="flex justify-around mt-2">
               <button
                 onClick={handleClose}
                 className="justify-center secondaryBtn w-32 bg-zinc-500"

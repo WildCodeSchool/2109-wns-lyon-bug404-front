@@ -1,4 +1,4 @@
-import { Field, ID, InputType, ObjectType } from "type-graphql";
+import { Field, ID, InputType, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
   Column,
@@ -6,12 +6,12 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToMany,
-  ManyToMany,
-} from "typeorm";
-import { Project } from "./Project";
-import { Status } from "./Status";
-import { User } from "./User";
-import { Category } from "./Category";
+  ManyToMany
+} from 'typeorm';
+import { Project } from './Project';
+import { Status } from './Status';
+import { User } from './User';
+import { Category } from './Category';
 
 @ObjectType()
 @Entity()
@@ -30,14 +30,14 @@ export class Task extends BaseEntity {
 
   @Field()
   @Column({
-    type: "datetime",
+    type: 'datetime'
   })
   due_date!: Date;
 
   @Field()
   @Column({
-    type: "datetime",
-    default: () => "NOW()",
+    type: 'datetime',
+    default: () => 'NOW()'
   })
   created_at!: Date;
 
@@ -53,11 +53,11 @@ export class Task extends BaseEntity {
   @ManyToMany(() => Category, (category) => category.tasks)
   categories?: Category[];
 
-  @Field()
+  @Field(() => Project)
   @ManyToOne(() => Project, (project) => project.tasks, { lazy: true })
   project: Project;
 
-  @Field({ nullable: true })
+  @Field(() => User, { nullable: true })
   @ManyToOne(() => User, (user) => user.id, { lazy: true })
   assigned_to?: User;
 }
@@ -72,9 +72,6 @@ export class TaskInput extends BaseEntity {
 
   @Field()
   due_date!: Date;
-
-  // @Field()
-  // spent_time!: string;
 }
 
 @InputType()
@@ -87,7 +84,4 @@ export class TaskUpdateInput extends BaseEntity {
 
   @Field({ nullable: true })
   due_date!: Date;
-
-  // @Field({ nullable: true })
-  // spent_time!: string;
 }

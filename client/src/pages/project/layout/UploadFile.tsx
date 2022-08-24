@@ -1,5 +1,4 @@
 import { useMutation } from '@apollo/client';
-import React from 'react';
 import { UPLOAD_FILE } from '../../../api/mutations/Upload';
 
 const UploadFile = ({ projectId }: { projectId: number }): JSX.Element => {
@@ -14,6 +13,7 @@ const UploadFile = ({ projectId }: { projectId: number }): JSX.Element => {
       variables: { file, projectId }
     });
   };
+
   return (
     <>
       <div className="flex w-9 h-12 items-center    bg-green-100 rounded-xl">
