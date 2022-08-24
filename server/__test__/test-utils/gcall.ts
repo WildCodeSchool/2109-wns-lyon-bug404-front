@@ -26,7 +26,6 @@ export const gCall = async ({ source, variableValues }: Options) => {
       ],
       authChecker: customAuthChecker
     }),
-
     source,
     variableValues
   });

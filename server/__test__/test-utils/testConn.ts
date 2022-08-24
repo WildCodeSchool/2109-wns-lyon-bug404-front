@@ -7,7 +7,6 @@ export const testConn = (drop: boolean = false) => {
     type: config.server as 'mysql',
     url: `${config.server}://${config.db_uname}:${config.db_password}@${config.host}/test`,
     entities: [path.resolve(__dirname, '../../src/models/*.{ts,js}')],
-
     synchronize: true
     // dropSchema: true
   });
